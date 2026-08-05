@@ -1,0 +1,48 @@
+1
+00:00:01,290 --> 00:00:08,930
+Now we're going to look at persistent footer buttons. It's another hidden gem here. It's actually along the bottom. This area right here is called the footer.
+
+2
+00:00:09,230 --> 00:00:16,190
+And in there you can put just about anything you want. So let's go ahead and fill this in. First thing, we want a variable.
+
+3
+00:00:23,030 --> 00:00:49,900
+And let's make a function. Let's change that to lowercase just to be consistent.
+
+4
+00:00:51,060 --> 00:00:53,240
+Alright, now we can get down to business here.
+
+5
+00:00:55,820 --> 00:01:02,100
+You can see persistent footer buttons takes an array of widgets. Widgets, meaning we can use any control we want.
+
+6
+00:01:04,460 --> 00:01:48,590
+In here, let's just say new icon button. And let's just randomly grab some. And let's just make a few of these.
+
+7
+00:01:59,250 --> 00:02:01,850
+Set these to just random icons so we can tell they're different.
+
+8
+00:02:09,180 --> 00:02:12,920
+And hot reload has picked up. As you can see, here's our footer area.
+
+9
+00:02:13,760 --> 00:02:17,360
+And here's our buttons. Let's go ahead and change this so we can see that update when we click.
+
+10
+00:02:25,040 --> 00:02:26,540
+And you can see the value changes.
+
+11
+00:02:28,520 --> 00:02:30,920
+Simple and easy way to put controls at the bottom of the screen.
+
+12
+00:02:30,940 --> 00:02:30,980
+Right all from the screen.
+

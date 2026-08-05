@@ -1,0 +1,188 @@
+1
+00:00:00,000 --> 00:00:29,920
+Alright, in this video, what we're going to cover is... what is this? An update? I don't have time for updates. I'm trying to get some stuff done here. So what we're going to cover is another update. So what's really going on here? Well, if you've worked with software at all, you know that, well, it has to be updated. What's going on under the hood is developers have either A, added new functionality, B, made things better, or they've actually fixed bugs, unintended issues with the code. Sometimes those bugs aren't readily apparent until you've actually
+
+2
+00:00:29,920 --> 00:00:59,040
+worked with it for a bit. And that's really what's going on with the newest version of Dart. There is Dart 2, and if you go to www.dartlang.org.dart-2, you'll see the new version has some changes. The biggest being Dart's type system. And if you're new, this may just all be white noise, but seasoned programmers are going to understand what I'm talking about when I say type. You have to declare a type now. And if you click on this link, you'll see that the terminology sound,
+
+3
+00:00:59,040 --> 00:01:23,540
+sound, the terms sound, and type safe are often used interchangeably. You might also see a strong mode. They're all basically the same thing that says you have to include a specific type. For example, take this code var list equals, and then we just have a list, and then we add an integer, and then we add a string. Did you catch the problem? Is this a list of integers, or is it a list of strings? Because we've added both, but we have to declare a type now.
+
+4
+00:01:23,980 --> 00:01:33,160
+So you'll get this ugly error message that says the argument type list can't be assigned to the parameter type, blah, blah, blah, whatever it is. Really, what we're saying here is you have to declare it.
+
+5
+00:01:33,740 --> 00:01:41,040
+And here's the correct code. Var list equals, and then we've declared a type, and everything works. If we tried to add a string, you would get an error.
+
+6
+00:01:42,480 --> 00:01:49,540
+So that's the biggest change. There's a lot of other additions and features and minor bug fixes that may come into play, but that's the biggest one right there.
+
+7
+00:01:49,540 --> 00:01:59,200
+You can, without a doubt, watch all of the Dart and Flutter tutorials and learn the core concepts, and most of the code out of the box will work just fine.
+
+8
+00:01:59,780 --> 00:02:02,780
+However, if you're going in, and let's just randomly pick one here.
+
+9
+00:02:04,000 --> 00:02:10,340
+Let's say you're watching a video, and you're typing as I'm typing, and then when you go to compile, mine on the video works, and yours does not.
+
+10
+00:02:10,340 --> 00:02:15,000
+That's exactly what's going on. It's a difference in version and the type system.
+
+11
+00:02:15,560 --> 00:02:21,460
+So, really, when you get to that situation, just click on source code, where it says resources available. It's the same thing.
+
+12
+00:02:21,940 --> 00:02:27,280
+It'll take you out to GitHub, and I have been going out in the background, and I've been updating the code whenever possible.
+
+13
+00:02:27,900 --> 00:02:31,540
+Some other folks in the community have also updated the code, and we're trying to fix that.
+
+14
+00:02:31,620 --> 00:02:36,300
+So, when in doubt, check GitHub first. There's no reason to retype all this if you don't have to.
+
+15
+00:02:37,000 --> 00:02:45,580
+And understand that packages, if you are just starting and you don't know what a package is, it's a body of code that someone else has written that you can use.
+
+16
+00:02:45,940 --> 00:02:50,800
+These packages are all written in Dart, and they are also susceptible to all those changes.
+
+17
+00:02:51,320 --> 00:02:57,460
+So, I'm not trying to scare you away. I'm just trying to let you know that everything written in Dart is now susceptible to these changes.
+
+18
+00:02:57,460 --> 00:03:04,800
+Therefore, it could break. And even if it isn't susceptible, like if you look at your launcher, you'll see in the change log,
+
+19
+00:03:05,020 --> 00:03:08,920
+breaking change, meaning they did something that's going to break code compatibility.
+
+20
+00:03:09,880 --> 00:03:15,600
+Yeah, that's just one of the caveats of working with somebody else's code. If they change something, it could break your stuff.
+
+21
+00:03:16,960 --> 00:03:20,020
+Dart is actually really, really good with documentation.
+
+22
+00:03:20,960 --> 00:03:26,020
+They've got a whole tutorial on the type system, how to fix common problems and types.
+
+23
+00:03:26,440 --> 00:03:31,400
+And it just really goes in depth. So, if you're having some sort of issue, definitely check their website.
+
+24
+00:03:31,820 --> 00:03:37,600
+But most of these videos out of the box should work just fine. If you have an existing project,
+
+25
+00:03:37,740 --> 00:03:41,460
+definitely read this. They do have a Dart 2 fix tool, which will try to help
+
+26
+00:03:42,360 --> 00:03:44,960
+migrate some of the usages from Dart 1 to Dart 2.
+
+27
+00:03:45,600 --> 00:03:51,300
+And moving forward, you should use upper constraints on the SDK version, meaning,
+
+28
+00:03:51,660 --> 00:03:58,320
+for example, SDK is greater than or equal to 2, less than 3, meaning this only works in Dart 2.
+
+29
+00:03:58,420 --> 00:04:01,040
+That's the correct way to do it. You're naming a specific version.
+
+30
+00:04:01,780 --> 00:04:06,840
+If you say something like this, greater than or equal to 1.2, but less than 3,
+
+31
+00:04:07,020 --> 00:04:11,780
+that means this starts working in Dart 1 and Dart 2. Do you see the problem there?
+
+32
+00:04:12,320 --> 00:04:17,940
+That is now susceptible to this sound change that we're talking about, where you have to actually
+
+33
+00:04:17,940 --> 00:04:22,620
+declare the type. Now, if you're brand new and you're starting with Dart for beginners,
+
+34
+00:04:22,840 --> 00:04:28,580
+a lot of what I just said makes zero sense. Just understand that if you're following along in
+
+35
+00:04:28,580 --> 00:04:33,100
+the video and you run into a problem, check the source code. There's no reason to retype everything.
+
+36
+00:04:33,500 --> 00:04:37,600
+And if you're using a package, or if you're following along in, let's say, like,
+
+37
+00:04:37,620 --> 00:04:41,220
+Flutter Advanced and something's not working, you're going to have to check the package.
+
+38
+00:04:41,220 --> 00:04:46,440
+They may have changed something as well. And they may also be susceptible to some of the Dart changes.
+
+39
+00:04:46,860 --> 00:04:50,500
+So it's kind of a one-two punch. Sometimes it's a little painful,
+
+40
+00:04:50,700 --> 00:04:54,380
+and sometimes these changes are major, but most of the time the changes are so minor,
+
+41
+00:04:54,380 --> 00:04:55,840
+you don't even know they exist.
+
+42
+00:04:55,880 --> 00:04:55,920
+you don't need one person...
+
+43
+00:04:55,920 --> 00:04:55,960
+you don't need...
+
+44
+00:04:55,960 --> 00:04:56,100
+.... perfect amount of stress...
+
+45
+00:04:56,640 --> 00:04:56,880
+Frutu...
+
+46
+00:04:56,880 --> 00:04:57,000
+...
+
+47
+00:04:58,340 --> 00:04:58,580
+Juror...
+

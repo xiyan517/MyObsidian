@@ -1,0 +1,112 @@
+1
+00:00:00,000 --> 00:00:03,660
+Alright, the first step is to download and install Android Studio.
+
+2
+00:00:04,080 --> 00:00:11,000
+Visit developer.android.com slash studio and download the Android Studio version that's right for you.
+
+3
+00:00:11,620 --> 00:00:15,680
+Once it's installed, go ahead and run it. You'll get this window right here.
+
+4
+00:00:16,600 --> 00:00:20,060
+From here, go to configure and SDK manager.
+
+5
+00:00:21,180 --> 00:00:26,460
+The SDK manager pops up. I would recommend downloading a few different SDKs.
+
+6
+00:00:27,020 --> 00:00:30,920
+Android's a little bit tricky sometimes when it comes to differences in SDKs.
+
+7
+00:00:31,420 --> 00:00:36,560
+Try to go with a newer API version, but you don't necessarily need the newest, latest, and greatest.
+
+8
+00:00:37,340 --> 00:00:40,960
+Personally, I'm using Android 8 through 5.1 for testing.
+
+9
+00:00:43,320 --> 00:00:48,140
+Next, go ahead and start a new Android project. Just leave the defaults.
+
+10
+00:00:48,520 --> 00:00:51,920
+And you don't really need to change the SDK, but you can if you'd like.
+
+11
+00:00:53,380 --> 00:00:56,900
+It doesn't really matter what sort of activity you choose, just hit next.
+
+12
+00:00:57,460 --> 00:00:57,960
+And finish.
+
+13
+00:01:01,440 --> 00:01:03,600
+Take a few seconds for Android Studio to open.
+
+14
+00:01:06,000 --> 00:01:10,380
+Once Android Studio opens up, click on this little icon right here.
+
+15
+00:01:10,580 --> 00:01:14,120
+It's the AVD manager, or Android Virtual Device Manager.
+
+16
+00:01:14,440 --> 00:01:17,280
+It looks like the little Android guy with a phone behind it.
+
+17
+00:01:17,500 --> 00:01:18,520
+It's right on the toolbar.
+
+18
+00:01:19,540 --> 00:01:24,480
+From here, you'll see virtual devices, or if this is your first installation, you will not see any.
+
+19
+00:01:25,020 --> 00:01:29,360
+Go ahead and click Create Virtual Device, and create a new phone.
+
+20
+00:01:29,760 --> 00:01:33,040
+I'm using Nexus 5X, but you can use anything you'd like.
+
+21
+00:01:33,680 --> 00:01:38,880
+Go ahead and click Next, and configure it with whatever SDK you'd like, and click Next again.
+
+22
+00:01:39,540 --> 00:01:43,520
+Give it a name, and click Finish.
+
+23
+00:01:53,470 --> 00:01:58,010
+Once your virtual device is in there, you can go ahead and run it by clicking this little green arrow here.
+
+24
+00:02:01,470 --> 00:02:06,310
+The virtual device itself will stir it up, and just make sure it boots all the way before continuing on.
+
+25
+00:02:15,440 --> 00:02:19,860
+This may take a moment, as these virtual devices tend to be a little bit slower than an actual phone.
+
+26
+00:02:32,220 --> 00:02:35,160
+Alright, the phone's fully booted up, and we're ready to work.
+
+27
+00:02:35,160 --> 00:02:35,560
+...
+
+28
+00:02:35,560 --> 00:02:36,660
+...
+

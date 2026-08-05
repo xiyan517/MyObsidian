@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/99_其他/01_obsidian入门.md",
+                "file": "3 学习笔记/02_APP/Dart.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_obsidian入门"
+              "title": "Dart"
             }
           }
         ]
@@ -182,25 +182,31 @@
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
       "command-palette:打开命令面板": false,
-      "bases:新建数据库": false
+      "bases:新建数据库": false,
+      "obsidian-git:Open Git source control": false
     }
   },
   "active": "b52d7eadf4d60b96",
   "lastOpenFiles": [
-    "2 学习笔记/未命名",
+    "临时文件/039 Expanded--[koudaizy.com].en.srt",
+    "临时文件/038 Card--[koudaizy.com].en.srt",
+    "临时文件/037 Rows and Columns--[koudaizy.com].en.srt",
+    "临时文件/040 Listview Builder--[koudaizy.com].en.srt",
+    "临时文件/033 Alert Dialog--[koudaizy.com].en.srt",
+    "临时文件/032 Snack Bar--[koudaizy.com].en.srt",
+    "临时文件/031 Bottom Sheet--[koudaizy.com].en.srt",
+    "临时文件/034 Simple Dialog--[koudaizy.com].en.srt",
+    "临时文件/027 Footer Buttons--[koudaizy.com].en.srt",
+    "临时文件/026 Drawer--[koudaizy.com].en.srt",
+    "临时文件/025 Floating Action Button--[koudaizy.com].en.srt",
+    "3 学习笔记/02_APP/Flutter.md",
+    "3 学习笔记/02_APP/Dart.md",
     "3 学习笔记/99_其他/01_obsidian入门.md",
-    "3 学习笔记/99_其他",
     "未命名.canvas",
-    "未命名.base",
     "0 草稿箱/链接.md",
-    "未命名",
-    "9 资源文件",
-    "2 项目计划（长期）",
     "3 学习笔记/01_RAG/16_杂项.md",
     "3 学习笔记/01_RAG/01_Ollama Setup.md",
-    "1 计划列表（短期）",
     "3 学习笔记/01_RAG/15_Resume Parsing with LLM.md",
-    "2 学习笔记/RAG/_tmp_nb15.txt",
     "2026-08-03.md",
     "3 学习笔记/01_RAG/12_ Agents.md",
     "3 学习笔记/01_RAG/13_Text-to-SQL (MySQL).md",
@@ -213,9 +219,6 @@
     "3 学习笔记/01_RAG/assets/06-chat-memory-cell2-0.png",
     "3 学习笔记/01_RAG/02_Langchain.md",
     "2 学习笔记/RAG/杂项.md",
-    "3 学习笔记/01_RAG/assets",
-    "2 学习笔记/RAG/_tmp_nb02.txt",
-    "2 学习笔记/RAG/Str/026 Ollama Speed Benchmark Nemotron 3 Nano vs Qwen3.5 Tokenssec--[koudaizy.com].en.srt",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_3.png",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_2.png",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_1.png",
@@ -231,8 +234,6 @@
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/01. Ollama Setup/ollama commands.md",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/00 Project Setup/setup.md",
     "公司/沃德科/杂.md",
-    "2 学习笔记/RAG/Chat Prompt Templates.md",
-    "3 学习笔记/01_RAG/07_Make Chatbot.md",
-    "3 学习笔记/学习笔记/本地 RAG.md"
+    "2 学习笔记/RAG/Chat Prompt Templates.md"
   ]
 }
