@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/02_APP/Dart.md",
+                "file": "3 学习笔记/02_APP/Flutter.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Dart"
+              "title": "Flutter"
             }
           }
         ]
@@ -186,21 +186,22 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b52d7eadf4d60b96",
+  "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/03_MCP/18_OpenClaw.md",
+    "3 学习笔记/03_MCP/17_BlenderMCP.md",
+    "3 学习笔记/03_MCP",
+    "3 学习笔记/02_APP/Dart.md",
+    "临时文件/main.dart",
+    "临时文件/main copy.dart",
+    "临时文件/main copy 4.dart",
+    "临时文件/main copy 3.dart",
     "临时文件/039 Expanded--[koudaizy.com].en.srt",
     "临时文件/038 Card--[koudaizy.com].en.srt",
     "临时文件/037 Rows and Columns--[koudaizy.com].en.srt",
     "临时文件/040 Listview Builder--[koudaizy.com].en.srt",
     "临时文件/033 Alert Dialog--[koudaizy.com].en.srt",
-    "临时文件/032 Snack Bar--[koudaizy.com].en.srt",
-    "临时文件/031 Bottom Sheet--[koudaizy.com].en.srt",
-    "临时文件/034 Simple Dialog--[koudaizy.com].en.srt",
-    "临时文件/027 Footer Buttons--[koudaizy.com].en.srt",
-    "临时文件/026 Drawer--[koudaizy.com].en.srt",
-    "临时文件/025 Floating Action Button--[koudaizy.com].en.srt",
     "3 学习笔记/02_APP/Flutter.md",
-    "3 学习笔记/02_APP/Dart.md",
     "3 学习笔记/99_其他/01_obsidian入门.md",
     "未命名.canvas",
     "0 草稿箱/链接.md",
@@ -233,7 +234,6 @@
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/data/finance and health rag system.jpg",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/01. Ollama Setup/ollama commands.md",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/00 Project Setup/setup.md",
-    "公司/沃德科/杂.md",
-    "2 学习笔记/RAG/Chat Prompt Templates.md"
+    "公司/沃德科/杂.md"
   ]
 }

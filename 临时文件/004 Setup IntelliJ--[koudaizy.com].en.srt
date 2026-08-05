@@ -1,8 +1,0 @@
-1
-00:00:00,000 --> 00:00:25,100
-Next, we need to install the IntelliJ IDE. Go ahead and download the community version. You can visit jetbrains.com slash idea slash download. And download the version that's right for you for Windows, Mac, or Linux. Once again, this is free and open source and shouldn't cost you a dime. Once the download is complete, go ahead and run it. And you'll see the IntelliJ screen. Go ahead and click Configure and go to Settings.
-
-2
-00:00:26,380 --> 00:00:43,720
-You're going to want to go to Plugins. If it's not listed, just type the word Plugins right here in the search box. From here, type in Flutter. I already have it installed. You should see a little button right here to install it. Go ahead and click Install. And it'll go through the installation process and then it will want to restart the IDE.
-
