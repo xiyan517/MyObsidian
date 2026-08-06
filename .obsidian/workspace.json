@@ -188,6 +188,10 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "临时文件/1 - Introduction to Flow Engineering and Finite State Machine for LangGraph--[koudaizy.com].en.srt",
+    "3 学习笔记/01_RAG/16_LangGraph.md",
+    "临时文件/LangGraph Getting Started.ipynb",
+    "3 学习笔记/01_RAG/杂项.md",
     "3 学习笔记/01_RAG/02_Langchain.md",
     "3 学习笔记/01_RAG/13_Text-to-SQL (SQLlite).md",
     "3 学习笔记/01_RAG/15_Resume Parsing with LLM（文本抽取-JSON）.md",
@@ -216,7 +220,6 @@
     "临时文件/038 Card--[koudaizy.com].en.srt",
     "临时文件/037 Rows and Columns--[koudaizy.com].en.srt",
     "临时文件/040 Listview Builder--[koudaizy.com].en.srt",
-    "临时文件/033 Alert Dialog--[koudaizy.com].en.srt",
     "3 学习笔记/99_其他/01_obsidian入门.md",
     "未命名.canvas",
     "0 草稿箱/链接.md",
@@ -228,12 +231,9 @@
     "3 学习笔记/01_RAG/assets/10-rag-cell3-0.png",
     "3 学习笔记/01_RAG/assets/09-vector-cell3-0.png",
     "3 学习笔记/01_RAG/assets/06-chat-memory-cell2-0.png",
-    "2 学习笔记/RAG/杂项.md",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_3.png",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_2.png",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_1.png",
-    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/sample.md",
-    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/scansmpl.md",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/data/finance and health rag system.jpg"
   ]
 }
