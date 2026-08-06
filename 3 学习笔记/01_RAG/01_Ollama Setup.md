@@ -221,10 +221,10 @@ Thinking 模型嫌慢：`/set nothink`。
 | 是否改基础模型 | 否，生成新名字 | 否，只存当前会话配置 |
 | 典型命令 | `ollama create sheldon -f modelfile.txt` | `/save sherlock` |
 
-### 5.1 Modelfile 最小例子
+### 5.1 Modelfile 最小例子（模型属性创建）
 
 文档：[modelfile.md](https://github.com/ollama/ollama/blob/main/docs/modelfile.md)
-
+https://github.com/ollama/ollama/blob/main/docs/modelfile.mdx
 ```text
 FROM llama3.2
 
