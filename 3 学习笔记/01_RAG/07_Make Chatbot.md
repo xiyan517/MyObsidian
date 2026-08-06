@@ -8,7 +8,7 @@ created: 2026-07-25
 updated: 2026-08-01
 series: 本地 RAG
 part: 7
-source: chat_stream.py（可删）· 字幕 067–074（可删）
+source:
 tags:
   - type/literature-note
   - topic/streamlit

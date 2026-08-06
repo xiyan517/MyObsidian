@@ -6,7 +6,7 @@ aliases:
   - Modelfile
   - 本地 LLM Serving
 created: 2026-07-31
-updated: 2026-07-31
+updated: 2026-08-06
 series: 本地 RAG
 part: 1
 source: 01. Ollama Setup（可删）· 字幕 005–020（可删）
@@ -15,6 +15,7 @@ tags:
   - topic/ollama
   - topic/local-rag
   - topic/modelfile
+  - topic/gguf
   - status/draft
 ---
 
@@ -27,16 +28,16 @@ tags:
 
 ## 本章目录
 
-| 章节 | 学什么 |
-| --- | --- |
-| §1 为什么是 Ollama | Serving 链路；GUI / CLI / API 三位一体 |
-| §2 选模型 | 标签、量化、Benchmark、按任务选型 |
-| §3 UI 与设置 | Context、联网、局域网；Vision 拖文件速览 |
-| §4 日常 CLI | pull / run / list / show / rm / ps / stop |
-| §5 自定义模型 | Modelfile `create` vs 会话里 `/set` + `/save` |
-| §6 Raw API | `/api/generate` 与 `/api/chat` |
-| §7 本地 GGUF | `FROM` 文件路径（可选、教育向） |
-| 文末速查 | 命令与端点一览 |
+| 章节             | 学什么                                        |
+| -------------- | ------------------------------------------ |
+| §1 为什么是 Ollama | Serving 链路；GUI / CLI / API 三位一体            |
+| §2 选模型         | 标签、量化、Benchmark、按任务选型                      |
+| §3 UI 与设置      | Context、联网、局域网；Vision 拖文件速览                |
+| §4 日常 CLI      | pull / run / list / show / rm / ps / stop  |
+| §5 自定义模型       | Modelfile `create` vs 会话里 `/set` + `/save` |
+| §6 Raw API     | `/api/generate` 与 `/api/chat`              |
+| §7 本地 GGUF     | 何时用、从哪下、怎么 `create`、推荐试跑模型              |
+| 文末速查           | 命令与端点一览                                    |
 
 ---
 
@@ -298,22 +299,148 @@ curl http://localhost:11434/api/chat -d "{
 
 ## 7. 本地 GGUF 导入（可选）
 
+日常优先 `ollama pull`。本节是**旁路**：手里已有 `.gguf`（或库里没有的量化 / 微调版）时，用 Modelfile 登记进 Ollama，之后仍走同一套 CLI / API。
+
+官方说明：[Importing a model](https://docs.ollama.com/import) · [Modelfile](https://github.com/ollama/ollama/blob/main/docs/modelfile.md)
+
+### 7.1 GGUF 是什么、何时用
+
+**GGUF**（GPT-Generated Unified Format）是 llama.cpp 生态常用的本地权重格式：单文件、自带元数据、常带量化（如 `Q4_K_M`）。Ollama 内部也大量基于同类运行时；官方库省去的是「你自己找文件 + 写 TEMPLATE」这一步。
+
+| 场景 | 建议 |
+| --- | --- |
+| Ollama Library 已有同款 | 直接 `pull`，别折腾 GGUF |
+| 要特定量化 / 仓库里没有的变体 | 下 GGUF → `create` |
+| 自己 / 别人微调后的 GGUF | 同上；注意 TEMPLATE 与底座是否匹配 |
+| 只想验证「导入流程通不通」 | 先下 **≤2B / 3B** 的 `Q4_K_M` 试跑 |
+
 与 §5 相同流程，差别只在 **`FROM`**：
 
 | `FROM` 写法 | 含义 |
 | --- | --- |
 | `FROM llama3.2` | 继承 Ollama 库里已有模型 |
-| `FROM "C:\\path\\to\\model.Q4_K_M.gguf"` | 从本机 GGUF 登记进 Ollama |
+| `FROM ./model.Q4_K_M.gguf` | 相对路径（`create` 时 cwd 要对） |
+| `FROM C:/models/xxx.Q4_K_M.gguf` | 绝对路径；Windows 用 `/` 或 `\\` |
+
+### 7.2 从 Hugging Face 找 GGUF
+
+主站：[huggingface.co](https://huggingface.co/) · 模型列表可按关键词筛：[Models · search=gguf](https://huggingface.co/models?search=gguf&sort=trending)
+
+**在页面上怎么找**
+
+1. 搜索框输入：`Qwen2.5-1.5B-Instruct GGUF`（模型名 + `GGUF`）。
+2. 打开仓库后看 **Files and versions**：点具体 `.gguf` 右侧下载；或复制仓库名给 CLI。
+3. 优先看：仓库是否带 `GGUF` 标签、README 里的量化表、下载量 / 最近更新、许可证（License）。
+
+| 来源类型 | HF 入口 | 怎么选 |
+| --- | --- | --- |
+| 量化社区仓 | [bartowski](https://huggingface.co/bartowski)、[lmstudio-community](https://huggingface.co/lmstudio-community)、[unsloth](https://huggingface.co/unsloth) | 同模型多档量化 + imatrix；README 常推荐默认用 `Q4_K_M` |
+| 官方 GGUF | 如 [Qwen](https://huggingface.co/Qwen) 下的 `*-Instruct-GGUF` | 模板 / 许可证更正统；文件名常小写 `qwen2.5-…-q4_k_m.gguf` |
+| 老牌量化仓 | [TheBloke](https://huggingface.co/TheBloke) | 小模型、旧卡仍可用；新大模型优先 bartowski / 官方 |
+
+下载注意：
+
+1. 选 **Instruct / Chat / IT**，不要 Base。
+2. 量化优先 **`Q4_K_M`**；紧再 `Q3_K_M` / `IQ4_XS`；要质量再 `Q5_K_M` / `Q8_0`。
+3. bartowski 仓多为 **imatrix** 量化，同档位往往更划算。
+4. 只下**单个** `.gguf`，别把整个仓库 clone 下来（官方 README 也这么建议）。
+
+> [!tip]
+> 课程口径显存约 **4–6 GB**：练导入用 **1B–3B + Q4_K_M**；正式对话再上 7B/8B，并给 KV cache 留余量。
+
+### 7.3 推荐试跑模型（HF 直链）
+
+目标：文件小、流程短、中文 / 指令可用。下表「推荐文件」以各仓库 README 为准（体积约数，会随量化脚本微调）。
+
+| 用途 | HF 仓库 | 推荐文件 | 约体积 |
+| --- | --- | --- | --- |
+| **首选练导入** | [bartowski/Qwen2.5-1.5B-Instruct-GGUF](https://huggingface.co/bartowski/Qwen2.5-1.5B-Instruct-GGUF) | `Qwen2.5-1.5B-Instruct-Q4_K_M.gguf` | ~1.0 GB |
+| 官方同款备选 | [Qwen/Qwen2.5-1.5B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF) | `qwen2.5-1.5b-instruct-q4_k_m.gguf` | ~1.1 GB |
+| 稍大一点、仍好跑 | [Qwen/Qwen2.5-3B-Instruct-GGUF](https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF) | `qwen2.5-3b-instruct-q4_k_m.gguf` | ~2 GB |
+| 英文生态常见 | [bartowski/Llama-3.2-3B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF) | `Llama-3.2-3B-Instruct-Q4_K_M.gguf` | ~2.0 GB |
+| **冒烟最小** | [TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF) | `tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf` | ~0.67 GB |
+
+为何这样排：Qwen2.5 小 Instruct 中文好、和本系列路线一致；Llama 3.2 文档例子多；TinyLlama 只验证 `create` 通不通。
+
+**用 Hugging Face CLI 只下单个文件**（需先 `pip install -U huggingface_hub`）：
 
 ```bash
-ollama create my-gguf -f mymodel.txt
-ollama run my-gguf
+# 首选：bartowski Qwen2.5 1.5B Q4_K_M（约 1 GB）
+huggingface-cli download bartowski/Qwen2.5-1.5B-Instruct-GGUF ^
+  --include "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf" ^
+  --local-dir D:\models\gguf
+
+# 官方 Qwen 仓（文件名小写）
+huggingface-cli download Qwen/Qwen2.5-1.5B-Instruct-GGUF ^
+  qwen2.5-1.5b-instruct-q4_k_m.gguf ^
+  --local-dir D:\models\gguf
+
+# 冒烟：TinyLlama
+huggingface-cli download TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF ^
+  --include "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf" ^
+  --local-dir D:\models\gguf
 ```
 
-Windows 路径注意转义 `\\`。Hugging Face 上下 GGUF（如 `Q4_K_M`）即可按此导入。
+浏览器：打开仓库 → Files → 点文件名旁下载图标。也可在 [HF 模型页](https://huggingface.co/models?search=Qwen2.5-Instruct+GGUF) 继续搜更大规格。
+
+能 `ollama pull` 到官方同款时，**不必**为「用模型」再下 GGUF；本节只练旁路。
+
+### 7.4 导入步骤
+
+**1. 固定目录**（路径无空格更省心）
+
+```text
+D:\models\gguf\
+  Qwen2.5-1.5B-Instruct-Q4_K_M.gguf
+  Modelfile
+```
+
+**2. 写最小 Modelfile**
+
+```text
+FROM ./Qwen2.5-1.5B-Instruct-Q4_K_M.gguf
+```
+
+或绝对路径：
+
+```text
+FROM D:/models/gguf/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf
+```
+
+需要时再加（与 §5 相同）：
+
+```text
+PARAMETER temperature 0.7
+PARAMETER num_ctx 4096
+
+SYSTEM You are a helpful assistant.
+```
+
+**3. 登记并试跑**
+
+```bash
+cd D:\models\gguf
+ollama create qwen25-1.5b-gguf -f Modelfile
+ollama run qwen25-1.5b-gguf
+ollama show qwen25-1.5b-gguf
+```
+
+`create` 会把权重纳入 Ollama 本地库；之后可像普通模型一样给 LangChain 的 `base_url` 用。改 Modelfile 后**同名再 `create` 一次**即覆盖配置。
+
+### 7.5 TEMPLATE 与常见坑
+
+| 现象 | 可能原因 | 处理 |
+| --- | --- | --- |
+| 能跑但答非所问 / 不听话 | 缺或错了对话 **TEMPLATE** | 对照模型卡 / README；或先 `pull` 官方同系，`/show modelfile` 抄 TEMPLATE |
+| `create` 找不到文件 | 相对路径 cwd 不对 | 改绝对路径，或 `cd` 到 gguf 同目录 |
+| Windows 路径炸 | `\` 被转义吃掉 | 用 `D:/...` 或 `D:\\...` |
+| 导入成功但 OOM / 极慢 | 量化太大或 ctx 开太大 | 换更小量化；`PARAMETER num_ctx` 先 2K–4K |
+| 角色戏崩、乱码特殊 token | Base 模型或模板不匹配 | 换 Instruct；核对 `<|im_start|>` 等标记 |
+
+LoRA / adapter 的 GGUF 另用 `ADAPTER` 挂到**同一底座**上，见官方 Import 文档；本课主路径用整模 GGUF 即可。
 
 > [!warning]
-> 只学「如何挂第三方权重」。未对齐模型可能弱化安全边界；勿用于违法或有害生成。
+> 教育向：只学「如何挂第三方权重」。未对齐 / 未审计的模型可能弱化安全边界；勿用于违法或有害生成。许可证以 HF 仓库为准（部分权重禁止商用）。
 
 ---
 
