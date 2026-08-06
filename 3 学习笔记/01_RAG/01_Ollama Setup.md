@@ -36,7 +36,7 @@ tags:
 | §4 日常 CLI      | pull / run / list / show / rm / ps / stop  |
 | §5 自定义模型       | Modelfile `create` vs 会话里 `/set` + `/save` |
 | §6 Raw API     | `/api/generate` 与 `/api/chat`              |
-| §7 本地 GGUF     | 何时用、从哪下、怎么 `create`、推荐试跑模型                 |
+| §7 本地 GGUF     | 何时用（含 Uncensored）、从哪下、怎么 `create`、推荐试跑模型   |
 | 文末速查           | 命令与端点一览                                    |
 
 ---
@@ -311,6 +311,7 @@ curl http://localhost:11434/api/chat -d "{
 | --- | --- |
 | Ollama Library 已有同款 | 直接 `pull`，别折腾 GGUF |
 | 要特定量化 / 仓库里没有的变体 | 下 GGUF → `create` |
+| 要 **Uncensored / Abliterated** 等库外变体 | 几乎只能走 GGUF → `create`（见下） |
 | 自己 / 别人微调后的 GGUF | 同上；注意 TEMPLATE 与底座是否匹配 |
 | 只想验证「导入流程通不通」 | 先下 **≤2B / 3B** 的 `Q4_K_M` 试跑 |
 
@@ -321,6 +322,29 @@ curl http://localhost:11434/api/chat -d "{
 | `FROM llama3.2` | 继承 Ollama 库里已有模型 |
 | `FROM ./model.Q4_K_M.gguf` | 相对路径（`create` 时 cwd 要对） |
 | `FROM C:/models/xxx.Q4_K_M.gguf` | 绝对路径；Windows 用 `/` 或 `\\` |
+
+#### Uncensored 与 GGUF（常见误区）
+
+**GGUF 只决定「怎么存、怎么加载」**，不决定「会不会拒答 / 能不能写敏感内容」。后者看**权重本身**有没有安全对齐（RLHF / 拒答训练等）。
+
+| 名称常见写法 | 大致含义 |
+| --- | --- |
+| **Instruct / Chat**（官方） | 有对齐；对违法、露骨、危险请求更易拒答或弱化 |
+| **Uncensored** | 社区微调：弱化 / 去掉拒答倾向，仍可能保留部分能力与风格 |
+| **Abliterated** | 一类去对齐手法（常改拒绝方向的内部表征）；拒答更少，质量不稳定 |
+| **Dolphin / Wizard 等系列** | 历史上常见的「更少审查」微调品牌；底座与年份不同，别当通用标签 |
+
+课程里提到 Uncensored，本质是：**官方 `ollama pull` 没有你要的变体时，从 HF 下对应 GGUF，再用 Modelfile `create` 挂进本地**——和下一篇 LangChain 换 `model=` 是同一套 Serving，只是权重名不同。
+
+选型要点：
+
+1. HF 搜 `底座名 + uncensored` / `abliterated` + `GGUF`；仍优先 **Instruct 系变体**，别下成 Base。
+2. 读 README：说明「去掉哪些拒答」、是否还带 NSFW 数据、许可证是否允许你的用途。
+3. 能力常略逊同尺寸官方 Instruct（对齐被拆掉时，指令遵循 / 幻觉也可能变差）；先小模型试流程。
+4. 本地 Ollama **没有**云端那种统一内容审核；边界完全取决于权重 + 你自己的提示与用途。
+
+> [!warning]
+> 学 RAG / Agent：**官方 Instruct + `pull` 足够**。Uncensored 只在你明确需要更少拒答、且能自行合规时才下；勿用于违法或有害生成。许可证与仓库说明为准。
 
 ### 7.2 从 Hugging Face 找 GGUF
 
