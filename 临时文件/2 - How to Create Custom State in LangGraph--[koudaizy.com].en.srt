@@ -1,0 +1,268 @@
+1
+00:00:00,000 --> 00:00:05,760
+All right, let's go ahead and get started with the coding part of our line graph lesson.
+
+2
+00:00:07,320 --> 00:00:15,700
+All right, so the first of all we are going to import our type dict and line graph graph necessary packages.
+
+3
+00:00:16,320 --> 00:00:27,560
+So from typing dot extensions import typed dict.
+
+4
+00:00:27,560 --> 00:00:34,160
+So this type dict is one of the most important part which we will be using throughout this course.
+
+5
+00:00:34,840 --> 00:00:40,860
+So this is like a type hinting. So basically this is like a dictionary but typed type of the dictionary.
+
+6
+00:00:41,240 --> 00:00:49,000
+And we are importing it from the typing underscore extension. In fact not the dot extension. All right.
+
+7
+00:00:50,600 --> 00:00:57,980
+And other than this we are going to import graph state start and end node of our line graph.
+
+8
+00:00:57,980 --> 00:01:17,360
+So from line graph dot graph import our state graph and then we are importing start and also the end.
+
+9
+00:01:17,360 --> 00:01:28,720
+As I told you earlier that start and end these are the default node which comes along with the line graph as a ready or pre-built node.
+
+10
+00:01:29,620 --> 00:01:33,580
+Other than this you have here a state graph as well.
+
+11
+00:01:34,240 --> 00:01:34,940
+All right.
+
+12
+00:01:35,660 --> 00:01:38,580
+So this state graph is like a canvas.
+
+13
+00:01:38,920 --> 00:01:45,720
+So this state graph is going to hold all of our nodes, ages and everything together.
+
+14
+00:01:45,720 --> 00:01:54,760
+So whatever state we have, whatever the node we have, whatever the ages we have, all those are going to be inside this state graph.
+
+15
+00:01:55,060 --> 00:02:01,100
+So state graph you can say that it is going to be like a canvas which is going to have all these nodes together.
+
+16
+00:02:01,300 --> 00:02:05,560
+Which we will use later on once we start building our graph.
+
+17
+00:02:06,380 --> 00:02:12,440
+Now in this particular diagram or block diagram you will notice these two nodes we have already imported.
+
+18
+00:02:12,820 --> 00:02:14,260
+Now it is time to import.
+
+19
+00:02:14,560 --> 00:02:22,360
+In fact it is time to make our custom nodes for processing input, adding a prefix and adding the suffix.
+
+20
+00:02:22,560 --> 00:02:25,800
+So in this particular flow architecture what I am doing here.
+
+21
+00:02:26,020 --> 00:02:30,500
+Whatever input comes from the user I will do some process on that.
+
+22
+00:02:30,500 --> 00:02:38,640
+There after I will add some suffix, in fact some prefix or something before the message after processing.
+
+23
+00:02:39,040 --> 00:02:43,840
+And then I will also add some suffix after the prefix.
+
+24
+00:02:44,540 --> 00:02:45,360
+All right.
+
+25
+00:02:45,760 --> 00:02:47,700
+Once you implement this then you will understand.
+
+26
+00:02:47,920 --> 00:02:48,880
+Always remember here.
+
+27
+00:02:49,040 --> 00:02:50,800
+All these are node here.
+
+28
+00:02:51,000 --> 00:02:54,760
+And these are custom node which we will write later on here.
+
+29
+00:02:55,700 --> 00:03:04,920
+And other than that, you have to also make sure that you write here a state as well using the type to predict here.
+
+30
+00:03:05,120 --> 00:03:07,140
+So this is a state of your graph.
+
+31
+00:03:07,320 --> 00:03:09,300
+You have to define your state as well.
+
+32
+00:03:09,580 --> 00:03:13,140
+A default state which comes in the lang graph that is the messages.
+
+33
+00:03:13,620 --> 00:03:21,120
+But let's say if you want to maintain a custom state between these nodes then you have to also define your state here as well.
+
+34
+00:03:21,120 --> 00:03:24,600
+It is going to be pretty much simple and straightforward.
+
+35
+00:03:25,280 --> 00:03:27,560
+Remember you have to write it something like this.
+
+36
+00:03:28,120 --> 00:03:28,420
+Class.
+
+37
+00:03:29,060 --> 00:03:30,860
+Thereafter your state name.
+
+38
+00:03:31,240 --> 00:03:31,900
+All right.
+
+39
+00:03:32,220 --> 00:03:35,620
+And then you have to make sure that you type dict it.
+
+40
+00:03:35,920 --> 00:03:39,160
+And then finally you can write all the fields here.
+
+41
+00:03:40,780 --> 00:03:41,480
+All right.
+
+42
+00:03:41,540 --> 00:03:44,960
+So this is the overall architecture how you generate the state.
+
+43
+00:03:44,960 --> 00:03:53,500
+So I write here class and first of all I am going to create here simple state and then the type dict.
+
+44
+00:03:54,360 --> 00:03:55,040
+All right.
+
+45
+00:03:55,280 --> 00:03:57,620
+So this is going to extend the type dict.
+
+46
+00:03:58,460 --> 00:04:02,400
+And this type dict is actually nothing more than just a dictionary.
+
+47
+00:04:02,960 --> 00:04:09,720
+So whatever field we are going to have here all those will get converted as the key of the dictionary.
+
+48
+00:04:10,540 --> 00:04:16,600
+So first of all I define here as input text that is going to be the string that is the str.
+
+49
+00:04:17,160 --> 00:04:21,440
+And thereafter output text that is also going to be the str here.
+
+50
+00:04:21,780 --> 00:04:27,180
+So whatever input is coming from the user that is going to be stored in input text.
+
+51
+00:04:27,520 --> 00:04:32,400
+Again remember it is up to you whatever field name you decide here.
+
+52
+00:04:32,400 --> 00:04:40,460
+For me I have decided here input text but you can decide the any field like a query, question or whatever you decide here.
+
+53
+00:04:40,960 --> 00:04:45,080
+And this says that the type of this particular variable.
+
+54
+00:04:45,380 --> 00:04:47,460
+So this is like a type hinting as well.
+
+55
+00:04:47,660 --> 00:04:50,360
+So we are saying that input text is going to be the string.
+
+56
+00:04:50,560 --> 00:04:53,500
+Output text is also going to be the string here.
+
+57
+00:04:55,000 --> 00:04:56,560
+Let's go ahead and execute this.
+
+58
+00:04:56,920 --> 00:04:59,240
+Now you have your simple state here.
+
+59
+00:04:59,640 --> 00:05:00,340
+All right.
+
+60
+00:05:00,340 --> 00:05:04,060
+If you run it here you are going to get your simple state.
+
+61
+00:05:04,380 --> 00:05:09,680
+And if you execute this first of all you are going to get here the empty dictionary.
+
+62
+00:05:10,060 --> 00:05:15,160
+But if you pass here some data like hello and the word it is going to store.
+
+63
+00:05:15,600 --> 00:05:16,660
+It's not like that.
+
+64
+00:05:16,780 --> 00:05:22,940
+In fact you have to pass here this data as a dictionary like input text and the output text something like this.
+
+65
+00:05:23,280 --> 00:05:26,060
+Now if you do it like this now you can see it something like this.
+
+66
+00:05:26,060 --> 00:05:50,360
+So as user put here some message like hello. Alright. And you can do some processing so that it can uppercase whatever the text is there then it will become hello in capital letters. Alright. Once we build our graph then you will see similar kind of the processing which will be executed using the line graph itself.
+
+67
+00:05:50,360 --> 00:06:02,400
+So this is how you can define a custom state in the line graph. In the next lesson I'll show you how you can get started with the creating your custom nodes. Alright. I'll see you then.
+

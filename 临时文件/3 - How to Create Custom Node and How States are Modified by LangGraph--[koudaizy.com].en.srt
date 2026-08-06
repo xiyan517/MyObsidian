@@ -1,0 +1,184 @@
+1
+00:00:00,000 --> 00:00:10,240
+Alright let's go ahead and see how you can create your custom node. So the custom node is nothing more than a python method in the lang graph.
+
+2
+00:00:10,720 --> 00:00:19,560
+So what we'll do here we will just create a simple python method and that python method will be used as the node in the lang graph.
+
+3
+00:00:19,820 --> 00:00:28,900
+Once you understand the fundamental of the lang graph then it is going to be super easy for you to follow along with all these lessons which we are going to cover.
+
+4
+00:00:29,580 --> 00:00:38,840
+Progressively we will be learning a lot of things in this particular course. As we move forward I'll be making it more complex in fact more advanced and advanced.
+
+5
+00:00:39,380 --> 00:00:44,940
+By the time you finish this course you will be feeling like you know everything about the lang graph.
+
+6
+00:00:45,940 --> 00:00:56,380
+Alright let's go ahead and create the custom node. So I'm just gonna write here custom node so that we can see that now we are going to create the custom node.
+
+7
+00:00:56,380 --> 00:01:05,560
+So the first of all I'm going to create a node named as the process input. As usual it is going to be a standard
+
+8
+00:01:07,600 --> 00:01:18,080
+a standard python method where I write def process input. Now after this this is going to be a very important thing here.
+
+9
+00:01:18,080 --> 00:01:26,600
+Once you have this process input. Inside this you have to pass a parameter. But one thing you have to remember here.
+
+10
+00:01:26,820 --> 00:01:35,160
+Whatever method you create here. For every method if you want to use that as a node then you have to make sure that
+
+11
+00:01:35,160 --> 00:01:43,200
+the method parameter is type hinted as the class state. Basically as a state here. Your custom state.
+
+12
+00:01:43,200 --> 00:01:52,860
+Alright. So we have our simple state. So whatever we put inside this we are going to type hint that as the simple state.
+
+13
+00:01:53,140 --> 00:01:59,580
+If its name is something else let's say the complex state or my state or whatever you give the name there.
+
+14
+00:01:59,840 --> 00:02:07,020
+You have to type hint that. So that your lang graph can know that this particular method is going to be used as a node here.
+
+15
+00:02:07,020 --> 00:02:21,560
+And a standard convention here that you have to write here a state. But its not necessary. It is just a standard convention that we are going to take an input parameter as a state for this particular node.
+
+16
+00:02:21,820 --> 00:02:35,740
+And that is going to be type hinted as the simple state. And whatever node you use in your lang graph that node is going to return the same state which you have created here.
+
+17
+00:02:35,740 --> 00:02:42,620
+Alright. So it is going to also return the simple state as well once this particular node is executed here.
+
+18
+00:02:42,820 --> 00:02:46,940
+So I write it like this. Something like this. A simple state.
+
+19
+00:02:48,140 --> 00:02:51,920
+Let's go ahead and auto complete this. And then understand what we are doing here.
+
+20
+00:02:52,360 --> 00:02:57,460
+So simple state. It is also going to return the simple state. Now what happen here.
+
+21
+00:02:57,700 --> 00:03:04,320
+This state is a dictionary as you know here. Inside dictionary I can access this output text here.
+
+22
+00:03:04,320 --> 00:03:12,240
+And then in output text I am doing processing on my input text data. And then I am just converting that into the upper case.
+
+23
+00:03:12,420 --> 00:03:19,540
+And then finally I am returning my state here. So this whole state will be returned from here.
+
+24
+00:03:20,100 --> 00:03:26,920
+Now once it returns this whole state it is going to return your input text and output text together.
+
+25
+00:03:26,920 --> 00:03:32,080
+So this is one way to do this. If you don't want to do in that way then what you can do here.
+
+26
+00:03:32,240 --> 00:03:40,480
+You can return only this output text here. Alright. So what you can do here. You can just simply write it something like this.
+
+27
+00:03:40,660 --> 00:03:44,700
+Output text is going to be like this. And then you can return here a dictionary.
+
+28
+00:03:44,700 --> 00:03:52,960
+So you have to make sure that whatever key you use here that key have to be exactly same as your class here.
+
+29
+00:03:53,180 --> 00:04:00,980
+Or your state here. So it is the output text. And thereafter I am going to put my output text here.
+
+30
+00:04:01,320 --> 00:04:09,040
+You don't need to return this. Why? Because line graph is so smart that it is going to maintain this whole state together.
+
+31
+00:04:09,040 --> 00:04:15,960
+But if you return only one key from this particular node then it is going to keep other...
+
+32
+00:04:15,960 --> 00:04:23,020
+It is going to keep other values as it is. So it is not going to change other keys. Right.
+
+33
+00:04:23,360 --> 00:04:31,180
+So only output text will be changed here. That's all. Other things will not be changed. Alright. Perfect.
+
+34
+00:04:31,180 --> 00:04:37,980
+For example, let's say if this is your state. Let's say just hypothetically assume that this is going to be your state.
+
+35
+00:04:38,200 --> 00:04:44,360
+And we execute this. And if we run our process input data. Alright.
+
+36
+00:04:44,740 --> 00:04:49,800
+And let's say I say that this is going to be my initial state. Where I have input text as hello.
+
+37
+00:04:50,040 --> 00:04:53,660
+And let's say the output text is nothing here. Alright.
+
+38
+00:04:53,660 --> 00:05:02,520
+In this case, what is going to happen if I process our input with this state and then see what happened here.
+
+39
+00:05:02,700 --> 00:05:07,360
+It is returning this output text and that is going to be the hello in the capital later.
+
+40
+00:05:08,120 --> 00:05:13,800
+But in the lang graph, once you complete your lang graph, then what will happen here?
+
+41
+00:05:14,700 --> 00:05:20,440
+In this particular state, this output text is going to be replaced with the hello.
+
+42
+00:05:20,440 --> 00:05:27,140
+And then the input text is going to be like this only. That means what I am trying to say here that it is going to be like this.
+
+43
+00:05:27,380 --> 00:05:32,960
+So this hello will get replaced here. And this input text will stay as it is.
+
+44
+00:05:33,880 --> 00:05:37,580
+Alright. Perfect. So this is how you can create the custom node.
+
+45
+00:05:37,780 --> 00:05:41,180
+We have created our process input custom node in this lesson.
+
+46
+00:05:41,440 --> 00:05:45,380
+In the next lesson we will see how you can create other nodes as well. I will see you then.
+

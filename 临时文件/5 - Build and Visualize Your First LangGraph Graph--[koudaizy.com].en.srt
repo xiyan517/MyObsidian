@@ -1,0 +1,144 @@
+1
+00:00:00,000 --> 00:00:27,160
+Alright, let's go ahead and see how you can create your first line graph. As I told you earlier that this overall thing what you see here that this is going to be folded into the state graph. So basically whatever you see here, let me just quickly draw this whole, you know, block here. So whatever you are seeing that this whole thing is going to be folded inside the state graph basically.
+
+2
+00:00:27,160 --> 00:00:56,640
+So state graph is going to work as the canvas. And all these are node here. So first of all we will start with creating our state graph. Inside this state graph we will pass our custom state. So what is our custom state currently? Our custom state which we had created earlier that is the simple state. Alright. And our simple state is having input text and output text these two type of the variable. So I write here a div.
+
+3
+00:00:57,160 --> 00:01:12,400
+And then create simple underscore graph. It is going to be like this. And thereafter what I write here. I write something like this. Builder equal to state graph.
+
+4
+00:01:12,400 --> 00:01:33,420
+And then I am going to provide my simple state here. So what happened here. Our canvas is ready. Now inside this canvas now it is time to add these nodes. We have added our state. Now that state will be applied to all the node. Whatever the node we put inside this canvas.
+
+5
+00:01:33,420 --> 00:01:53,280
+All those canvas. All those canvas are going to have access to this particular state. And that is the simple state. That is why I was telling you earlier that once we build our lang graph then you will see all these are going to return a complete state where it will be having input text as well.
+
+6
+00:01:54,120 --> 00:01:55,580
+Once you have your builder.
+
+7
+00:01:55,900 --> 00:02:06,580
+Once you have your builder. Thereafter it is time to add the node. So I write here add the nodes. You can just simply write it something like this. Builder dot add node here.
+
+8
+00:02:07,000 --> 00:02:19,760
+As you see here that it has add conditional edges which we will see later on. Then it has add edges add node add sequence. We are going to add here a node. I write it like this. Builder add node.
+
+9
+00:02:19,760 --> 00:02:32,700
+And you have to add node. And you have to first provide that a label to your node. Whatever the label you want to use for your node. So that once you display your graph that particular name should be used there.
+
+10
+00:02:33,140 --> 00:02:49,240
+I am going to say that process input. Generally it is advisable to name your label as your node name itself. Or the python function name itself. Or method name. I have here process underscore input.
+
+11
+00:02:49,240 --> 00:03:03,300
+This is our first node. This is our first node. And then for the second node I write it like this. The second node is actually the add underscore prefix.
+
+12
+00:03:04,180 --> 00:03:18,000
+Inside this again we have our add prefix. Thereafter we have our builder dot add underscore node. And now we are going to add here our suffix basically.
+
+13
+00:03:20,840 --> 00:03:37,180
+And inside this we have our add suffix method. This is how you have. This is how you can add your node inside the canvas. All these nodes are added. These are the pre-built node that will automatically get added. You don't need to add that.
+
+14
+00:03:38,440 --> 00:03:50,440
+Let's go ahead. Let's go ahead and connect the edges. So if you see this diagram you will see start node is connecting to the process input through the edge.
+
+15
+00:03:50,780 --> 00:04:00,800
+And then it is connecting to the add prefix. Then it is connecting to add suffix. Let's go ahead and do that. So what I do here first of all I write it like this.
+
+16
+00:04:01,840 --> 00:04:13,320
+This is builder. Builder dot add edge. And in this you have to provide the start key and the end key. So the start key first of all is going to be the start node.
+
+17
+00:04:13,700 --> 00:04:18,860
+If you remember here we had imported our start and the end node. These are this and this.
+
+18
+00:04:18,860 --> 00:04:29,960
+So what I do here. So the start node is going to be like this start. And the end key. So start is going to connect with the process input.
+
+19
+00:04:30,420 --> 00:04:34,800
+So I write the key or the label name that is going to be the process input.
+
+20
+00:04:36,040 --> 00:04:48,140
+Thereafter I can simply write here builder dot add edge. And now this process input is going to be connected with our add prefix basically.
+
+21
+00:04:48,140 --> 00:04:53,740
+I am just pasting it here. Then it is going to add with the add prefix.
+
+22
+00:04:54,120 --> 00:05:03,020
+We see it is going to connect with add prefix. Thereafter this builder dot add edge if you notice.
+
+23
+00:05:03,660 --> 00:05:14,740
+This one particularly this add prefix. In fact add prefix is going to be added with the add suffix.
+
+24
+00:05:16,040 --> 00:05:23,380
+So it is going to be like this. Add suffix. Let me just tell you again. Start goes to the process input.
+
+25
+00:05:23,600 --> 00:05:30,680
+This goes to add prefix. Add prefix connects with the add suffix. Now add suffix need to be connected with the end node here.
+
+26
+00:05:30,680 --> 00:05:47,200
+So basically now you write here builder dot add underscore age. And here add underscore suffix. And then you connect here with the end. Perfect.
+
+27
+00:05:47,560 --> 00:06:00,660
+Now you see there your graph is ready. Now it is time to compile your graph. Once you compile your graph then your graph becomes langchain runnables. That means you can invoke your graph langchain runnables.
+
+28
+00:06:00,660 --> 00:06:10,960
+Like we had invoked earlier our langchain. So you can just simply write here like this. Graph equal to builder dot compile.
+
+29
+00:06:12,160 --> 00:06:22,180
+It is going to be like this. And later on once we see here. We will be passing other parameters as well inside the compile. Like the check pointer and other things.
+
+30
+00:06:22,180 --> 00:06:32,700
+That we will see later on in this course. Once you have your graph now it is time to return your graph. That's all you have to do here. Alright. Perfect.
+
+31
+00:06:33,000 --> 00:06:42,740
+Now you have successfully created your graph. In the next lesson I will show you how you can visualize your graph. Otherwise I can just simply in fact show you here itself.
+
+32
+00:06:42,740 --> 00:06:50,980
+It is pretty much simple. You can just simply call your create underscore graph. And then you can just simply see your graph here.
+
+33
+00:06:51,680 --> 00:06:59,140
+This is how your graph is gonna look like. And this is what we had created. Start goes to the process input. It goes to the add prefix.
+
+34
+00:06:59,400 --> 00:07:06,220
+It goes to the add suffix. And then finally it is ending here. Alright. So this is all about in this lesson. I will see you in next one.
+
+35
+00:07:06,340 --> 00:07:06,580
+2CC.
+
+36
+00:07:06,580 --> 00:07:06,700
+2CC.
+
