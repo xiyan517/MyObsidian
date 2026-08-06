@@ -196,7 +196,7 @@ for chunk in llm.stream("用三句话解释什么是 RAG。"):
 
 ---
 
-## 6. 本地模型选型（字幕 021–028）
+## 6. 本地模型选型
 
 接 LangChain 前先定「跑得动、任务够」。课程硬件口径：**目标 ≤24GB VRAM**；演示机常为 **RTX 5090（32GB）**。tokens/s 随机器变。入口：[ollama.com](https://ollama.com)。
 
@@ -260,8 +260,7 @@ flowchart TB
 
 ---
 
-## 7. 仓库结构一眼（036）
-
+## 7. 仓库结构一眼
 录课时对比（数字会变）：LangChain GitHub 体量明显大于 LlamaIndex；生态采用面更大。源码在 [langchain-ai/langchain](https://github.com/langchain-ai/langchain) 的 **`libs/`**：
 
 | 路径 | 包直觉 | 记什么 |

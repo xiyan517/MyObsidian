@@ -428,15 +428,15 @@ print(output["poem"])
 
 ## LCEL 模式速查
 
-| 模式 | 写法 | 输出 |
-| --- | --- | --- |
-| 顺序 | `a \| b \| c` | 最后一步结果 |
-| 键映射接下一链 | `{"key": chain1} \| prompt \| …` | 下游按 key 取上游输出 |
-| 并行 | `RunnableParallel(x=c1, y=c2)` | `{"x": …, "y": …}` |
-| 路由 | `{…} \| RunnableLambda(route_fn)` | route_fn 返回的那条链的执行结果 |
-| 自定义函数 | `RunnableLambda(fn)` | fn 返回值 |
-| 透传 | `RunnablePassthrough()` | 上游值不变 |
-| 装饰器 | `@chain def foo(x): …` | 整个函数可 `.invoke` |
+| 模式      | 写法                                | 输出                   |
+| ------- | --------------------------------- | -------------------- |
+| 顺序      | `a \| b \| c`                     | 最后一步结果               |
+| 键映射接下一链 | `{"key": chain1} \| prompt \| …`  | 下游按 key 取上游输出        |
+| 并行      | `RunnableParallel(x=c1, y=c2)`    | `{"x": …, "y": …}`   |
+| 路由      | `{…} \| RunnableLambda(route_fn)` | route_fn 返回的那条链的执行结果 |
+| 自定义函数   | `RunnableLambda(fn)`              | fn 返回值               |
+| 透传      | `RunnablePassthrough()`           | 上游值不变                |
+| 装饰器     | `@chain def foo(x): …`            | 整个函数可 `.invoke`      |
 
 ```text
 顺序 → 并行（RunnableParallel）
