@@ -620,6 +620,6 @@ finally:
 
 ## 相关笔记
 
-- [[13_Text-to-SQL (MySQL)]] — Agent + 工具链
+- [[13_Text-to-SQL (SQLlite)]] — Agent + 工具链
 - [[05_Output Parsing]] — 结构化输出 / JSON
 - [[12_ Agents]] — `create_agent`（本课是链式抽取，非 Agent）

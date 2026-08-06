@@ -36,7 +36,7 @@ tags:
 | §4 日常 CLI      | pull / run / list / show / rm / ps / stop  |
 | §5 自定义模型       | Modelfile `create` vs 会话里 `/set` + `/save` |
 | §6 Raw API     | `/api/generate` 与 `/api/chat`              |
-| §7 本地 GGUF     | 何时用、从哪下、怎么 `create`、推荐试跑模型              |
+| §7 本地 GGUF     | 何时用、从哪下、怎么 `create`、推荐试跑模型                 |
 | 文末速查           | 命令与端点一览                                    |
 
 ---

@@ -51,7 +51,7 @@ Streamlit 入门（课上播放列表）：<https://www.youtube.com/watch?v=hff2
 
 | 关键 | 说明 |
 | --- | --- |
-| **选对模型** | 小模型结构化弱；仓库默认 `qwen3`，备用 `qwen2.5:7b`（同 [[14_LinkedIn Profile Scraping]]） |
+| **选对模型** | 小模型结构化弱；仓库默认 `qwen3`，备用 `qwen2.5:7b`（同 [[14_LinkedIn Profile Scraping（网页数据爬取分析）]]） |
 | **写对 prompt** | 字段 schema +「合法 JSON、不要开场白」 |
 | **两步输出** | 先抽成文本，再校验成真正 JSON |
 
@@ -108,7 +108,7 @@ load_dotenv("./../.env")  # 或 load_dotenv()，视工作目录而定
 
 ---
 
-## 2. 推荐目录（删课包后自建）
+## 2. 推荐目录
 
 原课在 `16. Resume Parsing/`。删掉 notebook / scripts / app 后，可按下面自建：
 
@@ -428,7 +428,7 @@ streamlit run app.py
 
 ## 相关笔记
 
-- [[14_LinkedIn Profile Scraping]] — 网页 → 两轮 LLM 结构化（同类「脏文本 → JSON」）
+- [[14_LinkedIn Profile Scraping（网页数据爬取分析）]] — 网页 → 两轮 LLM 结构化（同类「脏文本 → JSON」）
 - [[10_Chat with Your Own Documents]] — Document loader / PDF；旧版 LLM 脚本对照
 - [[11_Tool Calling]] — 同类脚本复用思路
 - [[05_Output Parsing]] — `StrOutputParser` / `JsonOutputParser`
