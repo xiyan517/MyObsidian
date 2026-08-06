@@ -188,6 +188,11 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/01_RAG/16-langgraph-graph.png",
+    "3 学习笔记/01_RAG/16-langgraph-overview.png",
+    "临时文件/_extract_imgs.py",
+    "临时文件/_nb_extract.txt",
+    "临时文件/_extract_nb.py",
     "临时文件/6 - Invoke LangGraph and Explore How States are Changing--[koudaizy.com].en.srt",
     "临时文件/5 - Build and Visualize Your First LangGraph Graph--[koudaizy.com].en.srt",
     "临时文件/4 - Execute Nested Nodes with LangGraph State--[koudaizy.com].en.srt",
@@ -215,11 +220,7 @@
     "3 学习笔记/02_APP/Flutter.md",
     "3 学习笔记/03_MCP/18_OpenClaw.md",
     "3 学习笔记/03_MCP/17_BlenderMCP.md",
-    "3 学习笔记/03_MCP",
     "3 学习笔记/02_APP/Dart.md",
-    "临时文件/main.dart",
-    "临时文件/main copy.dart",
-    "临时文件/main copy 4.dart",
     "3 学习笔记/99_其他/01_obsidian入门.md",
     "未命名.canvas",
     "0 草稿箱/链接.md",
@@ -233,7 +234,6 @@
     "3 学习笔记/01_RAG/assets/06-chat-memory-cell2-0.png",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_3.png",
     "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_2.png",
-    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_1.png",
-    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/data/finance and health rag system.jpg"
+    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_1.png"
   ]
 }
