@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/02_APP/Flutter.md",
-                "mode": "source",
+                "file": "3 学习笔记/01_RAG/01_Ollama Setup.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Flutter"
+              "title": "01_Ollama Setup"
             }
           }
         ]
@@ -188,6 +188,7 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/02_APP/Flutter.md",
     "3 学习笔记/03_MCP/18_OpenClaw.md",
     "3 学习笔记/03_MCP/17_BlenderMCP.md",
     "3 学习笔记/03_MCP",
@@ -201,7 +202,6 @@
     "临时文件/037 Rows and Columns--[koudaizy.com].en.srt",
     "临时文件/040 Listview Builder--[koudaizy.com].en.srt",
     "临时文件/033 Alert Dialog--[koudaizy.com].en.srt",
-    "3 学习笔记/02_APP/Flutter.md",
     "3 学习笔记/99_其他/01_obsidian入门.md",
     "未命名.canvas",
     "0 草稿箱/链接.md",
