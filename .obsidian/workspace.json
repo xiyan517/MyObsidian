@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/01_RAG/01_Ollama Setup.md",
+                "file": "3 学习笔记/03_MCP/17_BlenderMCP.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_Ollama Setup"
+              "title": "17_BlenderMCP"
             }
           }
         ]
@@ -186,8 +186,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b52d7eadf4d60b96",
+  "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/01_RAG/01_Ollama Setup.md",
     "3 学习笔记/04_AIVedio",
     "3 学习笔记/01_RAG/16-langgraph-graph.png",
     "3 学习笔记/01_RAG/16-langgraph-overview.png",
@@ -201,7 +202,6 @@
     "临时文件/2 - How to Create Custom State in LangGraph--[koudaizy.com].en.srt",
     "临时文件/1 - Introduction to Flow Engineering and Finite State Machine for LangGraph--[koudaizy.com].en.srt",
     "3 学习笔记/01_RAG/16_LangGraph.md",
-    "临时文件/LangGraph Getting Started.ipynb",
     "3 学习笔记/01_RAG/杂项.md",
     "3 学习笔记/01_RAG/02_Langchain.md",
     "3 学习笔记/01_RAG/13_Text-to-SQL (SQLlite).md",
@@ -212,7 +212,6 @@
     "3 学习笔记/01_RAG/10_Chat with Your Own Documents.md",
     "3 学习笔记/01_RAG/09_Vector Stores and Retrievals（向量存储与检索）.md",
     "3 学习笔记/01_RAG/08_Document Loaders.md",
-    "3 学习笔记/01_RAG/01_Ollama Setup.md",
     "3 学习笔记/01_RAG/03_Prompt Templates.md",
     "3 学习笔记/01_RAG/07_Make Chatbot.md",
     "3 学习笔记/01_RAG/06_Chat Message Memory.md",
