@@ -148,7 +148,7 @@ pip install -e .
 pip install sentencepiece tiktoken pybind11 ninja "pybind11[global]" huggingface_hub
 
 cd hy3dgen/texgen/differentiable_renderer
-pip install -e .
+	pip install -e .
 cd ~/Hunyuan3D-2
 ```
 
