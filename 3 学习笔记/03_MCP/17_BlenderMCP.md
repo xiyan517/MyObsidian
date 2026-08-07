@@ -156,6 +156,7 @@ cd ~/Hunyuan3D-2
 
 ```bash
 huggingface-cli download tencent/Hunyuan3D-2mini --local-dir ~/Hunyuan3D-2/weights
+hf download tencent/Hunyuan3D-2mini --local-dir ~/Hunyuan3D-2/weights
 ```
 
 ### 3.3 启动 API Server
