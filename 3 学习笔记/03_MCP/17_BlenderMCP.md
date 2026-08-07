@@ -161,6 +161,20 @@ hf download tencent/Hunyuan3D-2mini --local-dir ~/Hunyuan3D-2/weights
 
 ### 3.3 启动 API Server
 
+
+先获取其他需要的模型 在 Windows 上用下载工具获取
+
+如果 WSL 里网络不稳定，你可以在 **Windows 宿主机**上直接用浏览器或迅雷等工具下载：
+
+1. **下载地址**：`https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx`
+    
+2. **保存位置**：下载完成后，通过 `\\wsl$` 路径（比如 `\\wsl$\Ubuntu\root\.u2net\`），把文件复制到 WSL 的 `/root/.u2net/` 目录下。
+	``` shell
+	sudo mkdir -p /root/.u2net
+	cp /mnt/c/Users/Administrator/Downloads/u2net.onnx ~/.u2net/
+	```
+
+
 ```bash
 conda activate hunyuan3d_312
 cd ~/Hunyuan3D-2
@@ -404,3 +418,10 @@ python api_server.py \
 
 - [[16_杂项]] — Conda / PyTorch / CUDA 环境
 - [[11_Tool Calling]] — 工具调用思路（MCP 同类扩展面）
+
+
+命令
+```
+# 将wsl 的文件拷贝到主机  # 将 /root/my_folder 文件夹完整复制到 Windows 桌面
+cp -r /root/my_folder /mnt/c/Users/Administrator/Desktop/
+```
