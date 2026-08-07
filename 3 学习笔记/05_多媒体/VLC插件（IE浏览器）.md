@@ -117,16 +117,16 @@ tags:
 
 在 `<object>` 内用 `<param>` 设置：
 
-| 参数名 | 取值 | 说明 |
-| --- | --- | --- |
-| `Src` | 路径 / URL | 初始媒体源（也可用 JS `playlist.add` 动态指定） |
-| `AutoPlay` | `true` / `false` | 加载后是否自动播放 |
-| `AutoLoop` | `true` / `false` | 播完是否循环 |
-| `Volume` | `0`–`200` | 初始音量；`100` 为常态，`0` 静音 |
-| `ShowDisplay` | `true` / `false` | 是否显示画面；`false` 时近似纯音频 |
-| `Fullscreen` | `true` / `false` | 启动时是否全屏 |
-| `Controls` | `true` / `false` | 是否显示控制栏 |
-| `AllowFullScreen` | `true` / `false` | 是否允许用户切全屏 |
+| 参数名               | 取值               | 说明                                |
+| ----------------- | ---------------- | --------------------------------- |
+| `Src`             | 路径 / URL         | 初始媒体源（也可用 JS `playlist.add` 动态指定） |
+| `AutoPlay`        | `true` / `false` | 加载后是否自动播放                         |
+| `AutoLoop`        | `true` / `false` | 播完是否循环                            |
+| `Volume`          | `0`–`200`        | 初始音量；`100` 为常态，`0` 静音             |
+| `ShowDisplay`     | `true` / `false` | 是否显示画面；`false` 时近似纯音频             |
+| `Fullscreen`      | `true` / `false` | 启动时是否全屏                           |
+| `Controls`        | `true` / `false` | 是否显示控制栏                           |
+| `AllowFullScreen` | `true` / `false` | 是否允许用户切全屏                         |
 
 ## 5. 常见问题
 
