@@ -271,11 +271,11 @@ python api_server.py \
 
 ### 5.1 模型档位
 
-| Model | Type | Speed | Quality |
-| --- | --- | --- | --- |
-| hunyuan3d-dit-v2-mini | Standard DIT | 最慢 | 最好 |
-| hunyuan3d-dit-v2-mini-fast | Fast DIT（Guidance distillation） | ~2× | 略降 |
-| hunyuan3d-dit-v2-mini-turbo | Turbo DIT（Step distillation） | 最快 | 够用 |
+| Model                       | Type                            | Speed | Quality |
+| --------------------------- | ------------------------------- | ----- | ------- |
+| hunyuan3d-dit-v2-mini       | Standard DIT                    | 最慢    | 最好      |
+| hunyuan3d-dit-v2-mini-fast  | Fast DIT（Guidance distillation） | ~2×   | 略降      |
+| hunyuan3d-dit-v2-mini-turbo | Turbo DIT（Step distillation）    | 最快    | 够用      |
 
 ### 5.2 生成参数
 
