@@ -177,7 +177,11 @@ hf download tencent/Hunyuan3D-2mini --local-dir ~/Hunyuan3D-2/weights
 
 ```bash
 conda activate hunyuan3d_312
+
 cd ~/Hunyuan3D-2
+
+export HF_ENDPOINT=https://hf-mirror.com
+
 python api_server.py --host 0.0.0.0 --port 8081 --model_path ~/Hunyuan3D-2/weights --device cuda
 ```
 
