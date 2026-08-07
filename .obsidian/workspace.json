@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/03_MCP/17_BlenderMCP.md",
+                "file": "3 学习笔记/05_多媒体/VLC插件（IE浏览器）.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "17_BlenderMCP"
+              "title": "VLC插件（IE浏览器）"
             }
           }
         ]
@@ -188,8 +188,10 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
-    "0 草稿箱/链接.md",
     "3 学习笔记/03_MCP/17_BlenderMCP.md",
+    "3 学习笔记/05_多媒体/VLC插件（IE浏览器）.md",
+    "3 学习笔记/05_多媒体",
+    "0 草稿箱/链接.md",
     "3 学习笔记/01_RAG/01_Ollama Setup.md",
     "3 学习笔记/04_AIVedio",
     "3 学习笔记/01_RAG/16-langgraph-graph.png",
@@ -202,7 +204,6 @@
     "临时文件/4 - Execute Nested Nodes with LangGraph State--[koudaizy.com].en.srt",
     "临时文件/3 - How to Create Custom Node and How States are Modified by LangGraph--[koudaizy.com].en.srt",
     "临时文件/2 - How to Create Custom State in LangGraph--[koudaizy.com].en.srt",
-    "临时文件/1 - Introduction to Flow Engineering and Finite State Machine for LangGraph--[koudaizy.com].en.srt",
     "3 学习笔记/01_RAG/16_LangGraph.md",
     "3 学习笔记/01_RAG/杂项.md",
     "3 学习笔记/01_RAG/02_Langchain.md",
