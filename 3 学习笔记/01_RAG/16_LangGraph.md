@@ -6,10 +6,10 @@ aliases:
   - Finite State Machine
   - 16 LangGraph
 created: 2026-08-06
-updated: 2026-08-06
+updated: 2026-08-09
 series: 本地 RAG
 part: 16
-source: LangGraph Getting Started.ipynb · 字幕 1–6（Flow Engineering → Invoke）
+source: LangGraph Getting Started.ipynb · 字幕 1–6（Flow Engineering → Invoke）· [LangGraph Overview](https://docs.langchain.com/oss/python/langgraph/overview)
 tags:
   - type/literature-note
   - topic/langgraph
@@ -22,13 +22,14 @@ tags:
 # LangGraph Getting Started（状态 · 节点 · 边）
 
 > [!summary]
-> **本地 RAG · 第 16 部分**。LangGraph = 流程工程 + 有限状态机：用 `TypedDict` 定义 **State**，用 Python 函数当 **Node**，用 `add_edge` 连 **Edge**，装进 `StateGraph` 画布后 `compile()` 成 Runnable，再 `invoke`。重点对比：**嵌套函数调用**只传你返回的字段；**图执行**会按 State schema 维护/过滤字段。
+> **本地 RAG · 第 16 部分**。官方把 LangGraph 定位为**低层编排 runtime**（有状态、长运行 Agent）：用 `TypedDict` 定义 **State**，用 Python 函数当 **Node**，用 `add_edge` 连 **Edge**，装进 `StateGraph` 后 `compile()` 成 Runnable，再 `invoke`。重点对比：**嵌套函数调用**只传你返回的字段；**图执行**会按 State schema 维护/过滤字段。
 
-前置：[[02_Langchain]] · 环境：[[杂项]] · Agent 侧可对照：[[12_ Agents]]
+前置：[[02_Langchain]] · 环境：[[杂项]] · Agent 侧可对照：[[12_ Agents]] · 下一篇条件边：[[17_Conditional Routing]]
 
 主要链接：
 
-- [LangGraph 文档](https://langchain-ai.github.io/langgraph/)
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) — 编排定位、确定性 + agentic 混用、生态
+- [Graph API](https://docs.langchain.com/oss/python/langgraph/graph-api) — State / Node / Edge 细节
 - Notebook：`临时文件/LangGraph Getting Started.ipynb`（可删）
 - 课程频道：KGP Talkie
 
@@ -48,7 +49,9 @@ tags:
 
 ## 1. 定位：流程工程与有限状态机
 
-LangGraph 是偏底层的编排框架，用来做**有状态**、可多步（甚至多 Agent）的工作流：每一步（节点）处理数据，再交给下一步。
+据 [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview)：LangGraph 是**低层编排框架与 runtime**，专注 durable execution、streaming、human-in-the-loop、persistence 等能力；**不**替你抽象 Prompt / Agent 架构。强项是在同一张图里混用**手写确定性步骤**与 **LLM 驱动步骤**。模型与工具常接 [LangChain](https://docs.langchain.com/oss/python/langchain/overview)，但用 Graph 不必绑死 LC；常见 Agent 循环也可用更高层的 LangChain Agents。
+
+本课从课程侧用「流程工程 + 有限状态机」入门：每一步（节点）处理数据，再交给下一步。
 
 三个核心概念：
 
@@ -66,7 +69,7 @@ LangGraph 是偏底层的编排框架，用来做**有状态**、可多步（甚
 
 - 图总有预构建节点：**START** / **END**（不用手动画上去）
 - LangGraph 也有默认的 **Messages** 状态（维护对话历史）；本课先用自定义 `SimpleState`
-- 中间可加条件边（`add_conditional_edges`，后续课）
+- 中间可加条件边（`add_conditional_edges`）→ [[17_Conditional Routing]]
 
 ### 1.2 FSM 直觉：Eat / Sleep / Code
 
@@ -260,7 +263,7 @@ __start__ → process_input → add_prefix → add_suffix → __end__
 要点：
 
 - `add_node(标签, 函数)`：标签用于可视化与连边
-- 还有 `add_conditional_edges` / `add_sequence` 等（后续）
+- 还有 `add_conditional_edges` / `add_sequence` 等 → 条件边见 [[17_Conditional Routing]]
 - `compile()` 后可 `invoke`；以后还会传 **checkpointer** 等参数
 
 ```python
@@ -393,13 +396,8 @@ output_text: Hey, i have added something here. HELLO. i have added suffix!
 ## 相关笔记
 
 - [[02_Langchain]] — Runnable / `invoke` 基础
+- [[17_Conditional Routing]] — `add_conditional_edges`；结构化输出分流
 - [[12_ Agents]] — Agent 底层常基于 LangGraph
 - [[杂项]] — Conda / 依赖环境
 - [[06_Chat Message Memory]] — 对话历史（对照「本课尚未做 Messages State」）
 
-## 待处理
-
-- [ ] 条件边 `add_conditional_edges`
-- [ ] `compile(checkpointer=...)` 与持久化
-- [ ] Messages State：在图里维护历史消息列表
-- [ ] 字幕 1–6 英文 `.srt` 与 notebook 源文件是否从 `临时文件/` 清理
