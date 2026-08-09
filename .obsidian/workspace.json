@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/01_RAG/17_Conditional Routing.md",
+                "file": "0 草稿箱/已完成视频名称.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "17_Conditional Routing"
+              "title": "已完成视频名称"
             }
           }
         ]
@@ -188,18 +188,20 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
-    "828c974b-b4cb-413e-8aaf-18249cfe50ee.png",
+    "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
+    "0 草稿箱/已完成视频名称.md",
+    "3 学习笔记/01_RAG/assets/828c974b-b4cb-413e-8aaf-18249cfe50ee.png",
+    "3 学习笔记/01_RAG/17_Conditional Routing.md",
+    "3 学习笔记/03_MCP/00_MCP基础.md",
     "临时文件/_verify_zh.txt",
     "临时文件/_zh_comments.py",
     "临时文件/_routing_for_zh.txt",
     "3 学习笔记/01_RAG/16_LangGraph.md",
     "临时文件/_routing_cells.txt",
     "临时文件/Conditional Routing.ipynb",
-    "3 学习笔记/01_RAG/17_Conditional Routing.md",
     "3 学习笔记/01_RAG/17_",
     "3 学习笔记/01_RAG/杂项.md",
     "3 学习笔记/01_RAG/assets/16-langgraph-graph.png",
-    "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
     "0 草稿箱/链接.md",
     "3 学习笔记/03_MCP/17_BlenderMCP.md",
     "3 学习笔记/05_多媒体/VLC插件（IE浏览器）.md",
@@ -224,8 +226,6 @@
     "3 学习笔记/01_RAG/04_Chains.md",
     "3 学习笔记/02_APP/Flutter.md",
     "3 学习笔记/03_MCP/18_OpenClaw.md",
-    "3 学习笔记/02_APP/Dart.md",
-    "3 学习笔记/99_其他/01_obsidian入门.md",
     "未命名.canvas",
     "3 学习笔记/01_RAG/assets/13-sql-cell2-0.png",
     "3 学习笔记/01_RAG/assets/11-tool-cell2-0.png",
@@ -233,7 +233,6 @@
     "3 学习笔记/01_RAG/assets/10-rag-cell3-0.png",
     "3 学习笔记/01_RAG/assets/09-vector-cell3-0.png",
     "3 学习笔记/01_RAG/assets/06-chat-memory-cell2-0.png",
-    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_3.png",
-    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_2.png"
+    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_3.png"
   ]
 }
