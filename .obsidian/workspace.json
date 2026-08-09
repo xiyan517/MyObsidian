@@ -11,12 +11,14 @@
             "id": "bd5c854ca4e37544",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "3 学习笔记/01_RAG/assets/16-langgraph-overview.png"
+                "file": "3 学习笔记/03_MCP/00_MCP基础.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "16-langgraph-overview"
+              "icon": "lucide-file",
+              "title": "00_MCP基础"
             }
           }
         ]
@@ -186,9 +188,10 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/03_MCP/01_连接生命周期.md",
+    "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
     "0 草稿箱/已完成视频名称.md",
     "1 计划列表（短期）/已完成视频名称.md",
-    "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
     "3 学习笔记/01_RAG/assets/828c974b-b4cb-413e-8aaf-18249cfe50ee.png",
     "3 学习笔记/01_RAG/17_Conditional Routing.md",
     "3 学习笔记/03_MCP/00_MCP基础.md",
@@ -224,7 +227,6 @@
     "3 学习笔记/01_RAG/05_Output Parsing.md",
     "3 学习笔记/01_RAG/04_Chains.md",
     "3 学习笔记/02_APP/Flutter.md",
-    "3 学习笔记/03_MCP/18_OpenClaw.md",
     "未命名.canvas",
     "3 学习笔记/01_RAG/assets/13-sql-cell2-0.png",
     "3 学习笔记/01_RAG/assets/11-tool-cell2-0.png",
