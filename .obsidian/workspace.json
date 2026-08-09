@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/03_MCP/00_MCP基础.md",
+                "file": "7 常用命令/UV.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "00_MCP基础"
+              "title": "UV"
             }
           }
         ]
@@ -188,13 +188,16 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/03_MCP/00_MCP基础.md",
+    "7 常用命令/UV.md",
+    "7 常用命令/Conda.md",
     "3 学习笔记/03_MCP/01_连接生命周期.md",
+    "7 常用命令",
     "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
     "0 草稿箱/已完成视频名称.md",
     "1 计划列表（短期）/已完成视频名称.md",
     "3 学习笔记/01_RAG/assets/828c974b-b4cb-413e-8aaf-18249cfe50ee.png",
     "3 学习笔记/01_RAG/17_Conditional Routing.md",
-    "3 学习笔记/03_MCP/00_MCP基础.md",
     "临时文件/_verify_zh.txt",
     "临时文件/_zh_comments.py",
     "临时文件/_routing_for_zh.txt",
@@ -211,7 +214,6 @@
     "3 学习笔记/01_RAG/01_Ollama Setup.md",
     "3 学习笔记/04_AIVedio",
     "临时文件/_extract_imgs.py",
-    "临时文件/_nb_extract.txt",
     "3 学习笔记/01_RAG/02_Langchain.md",
     "3 学习笔记/01_RAG/13_Text-to-SQL (SQLlite).md",
     "3 学习笔记/01_RAG/15_Resume Parsing with LLM（文本抽取-JSON）.md",
@@ -225,8 +227,6 @@
     "3 学习笔记/01_RAG/07_Make Chatbot.md",
     "3 学习笔记/01_RAG/06_Chat Message Memory.md",
     "3 学习笔记/01_RAG/05_Output Parsing.md",
-    "3 学习笔记/01_RAG/04_Chains.md",
-    "3 学习笔记/02_APP/Flutter.md",
     "未命名.canvas",
     "3 学习笔记/01_RAG/assets/13-sql-cell2-0.png",
     "3 学习笔记/01_RAG/assets/11-tool-cell2-0.png",
