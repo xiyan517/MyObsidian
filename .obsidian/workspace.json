@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "7 常用命令/UV.md",
+                "file": "3 学习笔记/03_MCP/00_MCP基础.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "UV"
+              "title": "00_MCP基础"
             }
           }
         ]
@@ -188,8 +188,8 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
-    "3 学习笔记/03_MCP/00_MCP基础.md",
     "7 常用命令/UV.md",
+    "3 学习笔记/03_MCP/00_MCP基础.md",
     "7 常用命令/Conda.md",
     "3 学习笔记/03_MCP/01_连接生命周期.md",
     "7 常用命令",
