@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/01_RAG/01_Ollama Setup.md",
+                "file": "7 常用命令/Git.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_Ollama Setup"
+              "title": "Git"
             }
           }
         ]
@@ -188,12 +188,15 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "7 常用命令/Conda.md",
+    "7 常用命令/Python.md",
+    "7 常用命令/Git.md",
+    "3 学习笔记/01_RAG/01_Ollama Setup.md",
     "0 草稿箱/链接.md",
     "3 学习笔记/06_Skills",
     "3 学习笔记/03_MCP/00_MCP基础.md",
     "3 学习笔记/03_MCP/01_构建MCPServer.md",
     "7 常用命令/UV.md",
-    "7 常用命令/Conda.md",
     "3 学习笔记/03_MCP/01_连接生命周期.md",
     "7 常用命令",
     "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
@@ -213,7 +216,6 @@
     "3 学习笔记/03_MCP/17_BlenderMCP.md",
     "3 学习笔记/05_多媒体/VLC插件（IE浏览器）.md",
     "3 学习笔记/05_多媒体",
-    "3 学习笔记/01_RAG/01_Ollama Setup.md",
     "3 学习笔记/04_AIVedio",
     "3 学习笔记/01_RAG/02_Langchain.md",
     "3 学习笔记/01_RAG/13_Text-to-SQL (SQLlite).md",
@@ -225,7 +227,6 @@
     "3 学习笔记/01_RAG/09_Vector Stores and Retrievals（向量存储与检索）.md",
     "3 学习笔记/01_RAG/08_Document Loaders.md",
     "3 学习笔记/01_RAG/03_Prompt Templates.md",
-    "3 学习笔记/01_RAG/07_Make Chatbot.md",
     "未命名.canvas",
     "3 学习笔记/01_RAG/assets/13-sql-cell2-0.png",
     "3 学习笔记/01_RAG/assets/11-tool-cell2-0.png",
