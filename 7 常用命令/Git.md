@@ -29,6 +29,7 @@ git diff                             # 未暂存的改动
 git diff --staged                    # 已暂存、待提交的改动
 git add .                            # 暂存全部
 git add 文件.md                      # 只暂存某个文件
+git add IeVedio                      # 只暂存某个文件夹
 git commit -m "说明这次改了什么"
 git log --oneline -10                # 最近 10 条提交
 ```
@@ -113,5 +114,17 @@ git push -u origin main
 git pull
 git add .
 git commit -m "说明"
+git push
+```
+
+```
+git pull          # 拉取最新代码，避免冲突
+git status        # 确认要提交的文件
+git diff          # 确认修改内容
+
+
+
+git add .
+git commit -m "[feat] 今日工作内容"
 git push
 ```
