@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/02_APP/Flutter.md",
+                "file": "3 学习笔记/02_APP/Dart.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Flutter"
+              "title": "Dart"
             }
           }
         ]
@@ -188,6 +188,9 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/60_UE/UE入门.md",
+    "3 学习笔记/02_APP/Flutter.md",
+    "3 学习笔记/60_UE",
     "3 学习笔记/02_APP/Dart.md",
     "7 常用命令/Python.md",
     "7 常用命令/NSSM.md",
@@ -216,7 +219,6 @@
     "临时文件/_zh_comments.py",
     "临时文件/_routing_for_zh.txt",
     "3 学习笔记/01_RAG/16_LangGraph.md",
-    "临时文件/_routing_cells.txt",
     "3 学习笔记/01_RAG/杂项.md",
     "3 学习笔记/01_RAG/assets/16-langgraph-graph.png",
     "3 学习笔记/03_MCP/17_BlenderMCP.md",
@@ -225,8 +227,6 @@
     "3 学习笔记/01_RAG/13_Text-to-SQL (SQLlite).md",
     "3 学习笔记/01_RAG/15_Resume Parsing with LLM（文本抽取-JSON）.md",
     "3 学习笔记/01_RAG/14_LinkedIn Profile Scraping（网页数据爬取分析）.md",
-    "3 学习笔记/01_RAG/12_ Agents.md",
-    "3 学习笔记/01_RAG/11_Tool Calling.md",
     "未命名.canvas",
     "3 学习笔记/01_RAG/assets/13-sql-cell2-0.png",
     "3 学习笔记/01_RAG/assets/11-tool-cell2-0.png",
