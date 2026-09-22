@@ -1,0 +1,136 @@
+# ========================================
+# IDE 和编辑器
+# ========================================
+# Visual Studio
+.vs/
+*.vcxproj.user
+*.sdf
+*.suo
+*.user
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Cursor
+.cursor/
+
+# IDEA / CLion
+.idea/
+*.iml
+
+# ========================================
+# OS
+# ========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ========================================
+# 编译输出
+# ========================================
+Debug/
+Release/
+x64/
+x86/
+bin/
+obj/
+out/
+build/
+dist/
+
+# .NET
+*.pdb
+*.nupkg
+*.snupkg
+
+# ========================================
+# 日志和临时文件
+# ========================================
+*.log
+*.tmp
+*.cache
+*.bak
+*.old
+Logs/
+
+# ========================================
+# 包管理器
+# ========================================
+# Node.js
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+.venv/
+.webapi/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Java
+*.class
+target/
+.gradle/
+
+# ========================================
+# 数据库
+# ========================================
+*.db
+*.sqlite
+*.sqlite3
+
+# ========================================
+# 压缩文件
+# ========================================
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# ========================================
+# 其他
+# ========================================
+# 测试覆盖报告
+coverage/
+.coverage
+htmlcov/
+
+# 环境变量（保留示例文件）
+# .env
+# .env.*
+# !.env.example
+
+# ========================================
+# 项目特定目录
+# ========================================
+# 上传 / RTSP 截图等运行时数据
+wwwroot/
+公司/
+# 存放其他无需上传的文件
+.orther/
+
+# 第三方库
+# third_party/
+# libs/
+
+# 数据文件
+# data/
+# temp/
+# backup/
+
+# 配置文件（含敏感信息）
+# *.secret
+# config.local.*
+.gitignore
+
+# VS Code C# Dev Tools - Auto-generated runners
+.vscodecsdt/Runners/
