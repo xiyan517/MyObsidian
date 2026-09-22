@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "公司/沃德科/杂.md",
+                "file": "3 学习笔记/50_Bleader/01_基础知识.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "杂"
+              "title": "01_基础知识"
             }
           }
         ]
@@ -188,6 +188,7 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "公司/沃德科/杂.md",
     "3 学习笔记/50_Bleader/01_基础知识.md",
     "3 学习笔记/60_UE/UE5入门.md",
     "3 学习笔记/01_RAG/01_Ollama Setup.md",
@@ -199,7 +200,6 @@
     "7 常用命令/NSSM.md",
     "7 常用命令/Git.md",
     "7 常用命令/Hyper-v.md",
-    "公司/沃德科/杂.md",
     "0 草稿箱/链接.md",
     "1 计划列表（短期）/已完成视频名称.md",
     "3 学习笔记/99_其他/01_obsidian入门.md",
