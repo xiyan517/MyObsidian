@@ -12,6 +12,8 @@ aliases:
   - 插件安装
   - 中英文提示词
   - Tags 自动填充
+  - Segment Anything
+  - 自动抠图
 created: 2026-10-09
 updated: 2026-10-09
 tags:
@@ -20,7 +22,14 @@ tags:
   - topic/stable-diffusion
   - status/draft
 ---
+**释放被系统保留的端口（治本）**  
+如果你想继续用回 7860 端口，需要以**管理员身份**打开命令提示符（CMD），执行以下命令：
 
+cmd
+
+net stop winnat
+netsh interface ipv4 show excludedportrange protocol=tcp
+net start winnat
 # Stable Diffusion 基本介绍
 
 > [!summary]
@@ -248,3 +257,30 @@ sd_model_checkpoint, sd_vae, CLIP_stop_at_last_layers
 | 改中文习惯 | 在已有中文后追加自己的说法（如在「笑」后加「开心」） | 输入「开心」也能弹出 `smile` |
 
 改完保存，重启 UI（或按插件要求刷新）后再试。
+
+## 6. Segment Anything（自动抠图）
+
+要对画面**局部精准调整**（换裤子、改一件衣服等），装插件 `sd-webui-segment-anything`（资料包常见文件夹名 `sd-webui-segment-anything-master`）。
+
+| 步骤 | 做法 |
+| --- | --- |
+| 装插件 | 把该文件夹放进 `extensions` → 重启 WebUI，下面能看到插件名 |
+| 下模型 | 按显存选对应模型（资料里有），放到指定路径 |
+
+### 标注与预览
+
+1. 把要改的图拖进插件区。
+2. **左键**点要抠的区域（黑点 = 要）；**右键**点不要的区域（红点 = 不要）。点错了再左键点同一处可取消。
+3. 点 **预览**：会出三组蒙版，以及对应局部 PNG。
+4. 用下面的 **0 / 1 / 2** 选最合适的那一组。
+
+### 蒙版修边 → 送 ControlNet 换局部
+
+1. 勾选「发送到 ControlNet / 重绘」相关选项。
+2. 边缘毛糙：点下方柔化按钮，调边缘柔化尺寸 → **更新蒙版**。
+3. 把图片 + 蒙版发到「上传蒙版」页；打开 ControlNet，**选与刚才 0/1/2 对应的那一路**（选了 1 就用 ControlNet 1）。
+4. 预处理器和模型都选 **Inpainting**；调蒙版模糊、重绘幅度。
+5. 出图宽高与原图**同比例**，最好 1:1 关系保持住。
+6. 「上传蒙版」页**不用再手动上传图/蒙版**（ControlNet 已进后台）。在提示词写想换成的内容（如 `white pants`）→ 生成。
+
+这样就能只改局部，其余不动。
