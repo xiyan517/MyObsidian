@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/04_AIGC/02_文生图参数与快速出图.md",
+                "file": "3 学习笔记/04_AIGC/01_Stable Diffusion.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02_文生图参数与快速出图"
+              "title": "01_Stable Diffusion"
             }
           }
         ]
@@ -188,6 +188,12 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/04_AIGC/assets/02-upscalers.png",
+    "3 学习笔记/04_AIGC/assets/03-sampler-recommend.png",
+    "3 学习笔记/04_AIGC/01_Stable Diffusion.md",
+    "临时文件/4.大模型、Lora、VAE等模型的讲解，包括下载、安装、使用和功能效果.zh.srt",
+    "3 学习笔记/04_AIGC/02_采样方法.md",
+    "临时文件/3. 所有的采样方法详解与安装步骤.zh.srt",
     "3 学习笔记/03_MCP/17_BlenderMCP.md",
     "7 常用命令/Conda.md",
     "3 学习笔记/50_Bleader/01_基础知识.md",
@@ -219,13 +225,8 @@
     "3 学习笔记/06_Skills",
     "3 学习笔记/03_MCP/00_MCP基础.md",
     "3 学习笔记/03_MCP/01_构建MCPServer.md",
-    "3 学习笔记/03_MCP/01_连接生命周期.md",
-    "7 常用命令",
     "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
-    "0 草稿箱/已完成视频名称.md",
     "3 学习笔记/01_RAG/assets/828c974b-b4cb-413e-8aaf-18249cfe50ee.png",
-    "3 学习笔记/01_RAG/17_Conditional Routing.md",
-    "临时文件/_verify_zh.txt",
     "3 学习笔记/01_RAG/assets/16-langgraph-graph.png",
     "未命名.canvas",
     "3 学习笔记/01_RAG/assets/13-sql-cell2-0.png",
@@ -233,7 +234,6 @@
     "3 学习笔记/01_RAG/assets/10-rag-cell4-1.png",
     "3 学习笔记/01_RAG/assets/10-rag-cell3-0.png",
     "3 学习笔记/01_RAG/assets/09-vector-cell3-0.png",
-    "3 学习笔记/01_RAG/assets/06-chat-memory-cell2-0.png",
-    "2 学习笔记/RAG/Langchain-and-Ollama-main/Langchain-and-Ollama-main/08. Document Loaders/docling/figures/sample_textbook_figure_3.png"
+    "3 学习笔记/01_RAG/assets/06-chat-memory-cell2-0.png"
   ]
 }
