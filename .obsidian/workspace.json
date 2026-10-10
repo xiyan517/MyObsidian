@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/60_UE/UE5入门.md",
+                "file": "3 学习笔记/01_RAG/17_Conditional Routing.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "UE5入门"
+              "title": "17_Conditional Routing"
             }
           }
         ]
@@ -188,6 +188,12 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "3 学习笔记/01_RAG/杂项.md",
+    "3 学习笔记/01_RAG/17_Conditional Routing.md",
+    "3 学习笔记/01_RAG/16_LangGraph.md",
+    "3 学习笔记/01_RAG/14_LinkedIn Profile Scraping（网页数据爬取分析）.md",
+    "3 学习笔记/01_RAG/15_Resume Parsing with LLM（文本抽取-JSON）.md",
+    "3 学习笔记/60_UE/UE5入门.md",
     "3 学习笔记/04_AIGC/01_Stable Diffusion.md",
     "3 学习笔记/99_其他/01_obsidian入门.md",
     "临时文件/2. 中英文提示词插件 — 打造个性化提示词库.zh.srt",
@@ -204,12 +210,10 @@
     "公司/沃德科/杂.md",
     "公司/沃德科",
     "公司",
-    "3 学习笔记/60_UE/UE5入门.md",
     "3 学习笔记/01_RAG/01_Ollama Setup.md",
     "3 学习笔记/01_RAG/02_Langchain.md",
     "3 学习笔记/01_RAG/03_Prompt Templates.md",
     "3 学习笔记/01_RAG/04_Chains.md",
-    "3 学习笔记/01_RAG/杂项.md",
     "7 常用命令/Python.md",
     "7 常用命令/NSSM.md",
     "7 常用命令/Git.md",
@@ -218,13 +222,10 @@
     "1 计划列表（短期）/已完成视频名称.md",
     "7 常用命令/UV.md",
     "6 归档文件/001_电影.md",
-    "3 学习笔记/02_APP/Dart.md",
-    "3 学习笔记/02_APP/Flutter.md",
     "3 学习笔记/60_UE",
     "未命名",
     "3 学习笔记/50_Bleader/01_基础知识",
     "3 学习笔记/50_Bleader",
-    "3 学习笔记/03_MCP/00_MCP基础.md",
     "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
     "3 学习笔记/01_RAG/assets/828c974b-b4cb-413e-8aaf-18249cfe50ee.png",
     "3 学习笔记/01_RAG/assets/16-langgraph-graph.png",
