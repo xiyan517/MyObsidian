@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/04_AIGC/01_Stable Diffusion.md",
+                "file": "3 学习笔记/60_UE/UE5入门.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_Stable Diffusion"
+              "title": "UE5入门"
             }
           }
         ]
@@ -188,8 +188,8 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
-    "3 学习笔记/99_其他/01_obsidian入门.md",
     "3 学习笔记/04_AIGC/01_Stable Diffusion.md",
+    "3 学习笔记/99_其他/01_obsidian入门.md",
     "临时文件/2. 中英文提示词插件 — 打造个性化提示词库.zh.srt",
     "临时文件/1.stablediffusion插件的下载、安装和更新.zh.srt",
     "3 学习笔记/04_AIGC/02_文生图参数与快速出图.md",
