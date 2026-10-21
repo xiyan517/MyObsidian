@@ -324,7 +324,7 @@ flowchart TB
 | 发票、订单邮件 | Computer Use、开放域客服 |
 
 落地口诀：复杂流程 → **拆成可逐步执行的步骤** → 再做成 agentic workflow。  
-下一讲：**任务分解（task decomposition）**。
+展开：[[03_任务分解]]
 
 ---
 
