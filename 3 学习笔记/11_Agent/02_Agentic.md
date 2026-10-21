@@ -1,5 +1,5 @@
 ---
-title: Agentic — 自主性、优势与应用
+title: Agentic — Module 1 总览
 aliases:
   - agentic
   - 自主性谱系
@@ -7,6 +7,15 @@ aliases:
   - agentic workflow 优势
   - agentic 应用
   - computer use
+  - task decomposition
+  - 任务分解
+  - 积木块
+  - evals
+  - LLM as judge
+  - reflection
+  - tool use
+  - planning
+  - multi-agent
   - 吴恩达 Agentic AI
 created: 2026-10-21
 updated: 2026-10-21
@@ -18,12 +27,12 @@ tags:
   - status/draft
 ---
 
-# Agentic：自主性、优势与应用
+# Agentic：Module 1 总览
 
 > [!summary]
-> **agentic** 描述程度，不争论「算不算 Agent」。自主性：低 → 半 → 高。三大优势：效果、并行、模块化。落地从 **有 SOP、偏文本** 起步；步骤未知 / Computer Use 更难。核心技能：**任务拆步**。
+> **agentic** 是程度不是开关。优势：效果 / 并行 / 模块化。落地先 SOP+文本。关键三技能：**拆步**（LLM/工具能否做？不能再拆）、**Evals**（先建再看输出找坑；客观用代码、主观用 LLM-as-judge；端到端 + 组件级 + 读 traces）、**四大设计模式**（Reflection / Tool Use / Planning / Multi-agent）。下一模块深挖 Reflection。
 
-来源：吴恩达 《Agentic AI》· P03–P05
+来源：吴恩达 《Agentic AI》· P03–P08（Module 1）
 
 > [!tip] 读图颜色（课内约定）
 > 🔴 用户输入　⚪ LLM　🟢 工具/其它软件
@@ -323,25 +332,397 @@ flowchart TB
 | **纯文本**（LLM 所长） | 多模态（音/视）——能做但更脆 |
 | 发票、订单邮件 | Computer Use、开放域客服 |
 
-落地口诀：复杂流程 → **拆成可逐步执行的步骤** → 再做成 agentic workflow。  
-展开：[[03_任务分解]]
+落地口诀：复杂流程 → **拆成可逐步执行的步骤** → 再做成 agentic workflow（见下节）。
 
 ---
 
-## 7. 带走
+## 7. 任务分解：识别工作流中的步骤
+
+人和公司每天做很多有用的事。怎么拆成 **离散步骤**，让 agentic workflow 跟着走？
+
+```mermaid
+flowchart LR
+  Stuff[人/业务在做的事] --> Decomp[任务分解]
+  Decomp --> Steps[离散步骤 1·2·3…]
+  Steps --> Check{每步能否由<br/>LLM / 代码 / 工具完成?}
+  Check -->|能| Build[串成 workflow]
+  Check -->|不能| Decomp2[再拆更细] --> Check
+```
+
+### 7.1 例：研究 Agent（迭代加细）
+
+目标：就主题 X 写一篇有深度的文章。
+
+**第 0 版：直接生成**
+
+```mermaid
+flowchart LR
+  U([主题 X]) --> L[LLM 一次写完] --> O([成稿])
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  class U,O user
+  class L llm
+```
+
+问题：往往只到表面、常识层，不够深。
+
+**第 1 版：按「人会怎么写」拆三步**（大纲 → 搜网 → 再写）
+
+```mermaid
+flowchart LR
+  U([主题 X]) --> S1[① LLM 写大纲]
+  S1 --> S2[② LLM 生成检索词<br/>+ 网页搜索]
+  S2 --> S3[③ LLM 据检索结果写文]
+  S3 --> O([成稿])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class U,O user
+  class S1,S3 llm
+  class S2 tool
+```
+
+| 步骤 | 能否落地？ |
+| --- | --- |
+| 写大纲 | ✅ LLM 多数主题够用 |
+| 检索 | ✅ LLM 出检索词 + 搜索工具 |
+| 据结果写文 | ✅ LLM 吃检索结果再写 |
+
+可作为 **合理的第一版 workflow**。
+
+**第 2 版：成稿仍「散」→ 再拆「写文」**
+
+开头 / 中间 / 结尾不一致时，人会：**初稿 → 审视哪里要改 → 修订**。
+
+```mermaid
+flowchart LR
+  U([主题 X]) --> S1[① 大纲]
+  S1 --> S2[② 检索]
+  S2 --> S3a[③a 初稿]
+  S3a --> S3b[③b 审视要改处]
+  S3b --> S3c[③c 修订]
+  S3c --> O([成稿])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class U,O user
+  class S1,S3a,S3b,S3c llm
+  class S2 tool
+```
+
+```mermaid
+flowchart TB
+  V0[直接生成 · 1 步] -->|不够深| V1[大纲 → 检索 → 写文 · 3 步]
+  V1 -->|仍散、不连贯| V2[写文再拆：初稿 → 审视 → 修订]
+  V2 -.->|还不满意| Vn[继续改流程…]
+  style V0 fill:#fecaca
+  style V1 fill:#fef08a
+  style V2 fill:#bbf7d0
+```
+
+> [!important]
+> 分解不是一次到位：先粗拆 → 跑起来看结果 → **对薄弱那一步继续拆**。
+
+### 7.2 例：订单问询（拆步视角）
+
+与 §5.2 同一业务，这里强调「每步能否落地」：
+
+```mermaid
+flowchart LR
+  M([客户邮件]) --> S1[① 抽取关键信息]
+  S1 --> S2[② 生成查询 · 拉订单库]
+  S2 --> S3[③ 起草并发送回复]
+  S3 --> O([发出邮件])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class M,O user
+  class S1 llm
+  class S2,S3 tool
+```
+
+| 步骤 | 落地方式 |
+| --- | --- |
+| 抽信息 | LLM |
+| 查记录 | LLM + **查订单库** |
+| 回复 | LLM + **发邮件** API（或人审） |
+
+### 7.3 例：发票（拆步视角）
+
+与 §5.1 对应；PDF 已转文本后两步即可：
+
+```mermaid
+flowchart LR
+  T([发票文本]) --> S1[① 抽取字段]
+  S1 --> S2[② 调函数写库]
+  S2 --> DB[(数据库)]
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class T user
+  class S1 llm
+  class S2,DB tool
+```
+
+### 7.4 积木箱
+
+建 workflow ≈ 用积木 **排顺序、接起来**。
 
 ```mermaid
 mindmap
-  root((Agentic))
+  root((积木))
+    AI 模型
+      LLM / 多模态
+        生成文本
+        决定调什么
+        抽取信息
+      专用模型
+        PDF→文本
+        TTS
+        图像分析
+    软件工具
+      API
+        实时搜索
+        天气
+        发邮件
+        日历
+      检索
+        查数据库
+        RAG
+      执行代码
+        LLM 写代码并在本机跑
+```
+
+```mermaid
+flowchart LR
+  Work[人/业务在做什么] --> Blocks[手头积木]
+  Blocks --> Seq[怎样排序组合]
+  Seq --> WF[agentic workflow]
+```
+
+越清楚积木有哪些，越容易想象能搭出什么。（工具细节后续模块展开。）
+
+### 7.5 拆步心法（常问两句）
+
+```mermaid
+flowchart TB
+  Step[看着某一步] --> Q1{LLM 或工具<br/>（API / 函数）能做吗?}
+  Q1 -->|能| Keep[留下，接入 workflow]
+  Q1 -->|不能| Q2[人会怎么做这一步?]
+  Q2 --> Smaller[拆成更小步骤]
+  Smaller --> Q1
+```
+
+| 问题 | 作用 |
+| --- | --- |
+| ① 这一步能否用 LLM 或工具实现？ | 判断是否「可落地」 |
+| ② 若不能：人会怎么做？能否再拆细？ | 把不可行步变成可行微步 |
+
+---
+
+## 8. Evals：用评估驱动改进
+
+能否高效做出好用的 agentic workflow，很大程度取决于有没有 **纪律性的评估（evals）**。本节约览；课程 Module 4 会深挖。
+
+### 8.1 先建，再盯输出找坑
+
+很难事先穷尽「会出什么错」。推荐：
+
+```mermaid
+flowchart LR
+  Build[先做出 workflow] --> Read[人工读大量输出]
+  Read --> Spot[发现「希望更好」的点]
+  Spot --> Eval[加 eval 跟踪该错误]
+  Eval --> Fix[改系统消掉问题]
+  Fix --> Read
+```
+
+课例（订单客服）：读输出才发现常提竞品——
+
+- *We're much better than CompCo*
+- *Unlike RivalCo, we make returns easy*
+
+业务上往往 **不想提竞品**；这类问题很难在建之前预见。
+
+> [!important]
+> **Best practice：先建 → 检查哪里不满意 → 再设计 eval + 改进**，而不是空想全套评估再动手。
+
+### 8.2 客观指标：写代码数
+
+若「提竞品」算错误，且有竞品名单（CompCo / RivalCo / OtherCo）：
+
+- 在输出里 **字符串搜索** 竞品名
+- 统计出现次数 / 占总回复比例
+
+客观 = 黑白可判（提了 or 没提）→ **代码就能评**。
+
+### 8.3 主观指标：LLM-as-Judge
+
+自由文本还有难写死规则的标准（如「文章好不好」）。常用另一 LLM 当裁判：
+
+```mermaid
+flowchart LR
+  Agent[研究 Agent 写多篇报告] --> Judge[Judge LLM<br/>按 1–5 打质量分]
+  Judge --> Track[跟踪分数是否随改进上升]
+```
+
+例：黑洞进展文 → 3 分；机器人采水果文 → 4 分；改进 Agent 后期望分数上升。
+
+> [!warning]
+> LLM 对 **1–5 量表** 其实不太准；可作初切，吴恩达本人不太爱用。后续模块有更准的打分法。
+
+### 8.4 两类 eval + 错误分析
+
+| 类型 | 测什么 | 用途 |
+| --- | --- | --- |
+| **端到端（end-to-end）** | 整个 Agent 最终输出质量 | 看整体是否变好 |
+| **组件级（component-level）** | 工作流 **某一步** 的输出质量 | 定位该改哪一环 |
+
+另加 **Error analysis**：通读中间输出 / **traces**（每步 LLM 轨迹），找未达预期处 → 发现改进机会。
+
+```mermaid
+flowchart TB
+  subgraph 评什么
+    E2E[端到端 eval]
+    Comp[组件级 eval]
+  end
+  subgraph 怎么评
+    Obj[客观：代码检查]
+    Sub[主观：LLM-as-Judge]
+  end
+  subgraph 怎么找坑
+    Trace[读 traces / 中间输出]
+  end
+  E2E & Comp --> Obj & Sub
+  Trace --> Spot2[改进点]
+```
+
+---
+
+## 9. 四大设计模式
+
+把积木拼成复杂 workflow 的常用 **拼法**：
+
+```mermaid
+flowchart LR
+  R[① Reflection<br/>反思] --- T[② Tool Use<br/>工具使用]
+  T --- P[③ Planning<br/>规划]
+  P --- M[④ Multi-agent<br/>多 Agent 协作]
+```
+
+### 9.1 Reflection（反思）
+
+让 LLM **审视自己的输出**（或结合外部反馈）再迭代：
+
+```mermaid
+flowchart LR
+  U([写代码]) --> L1[LLM 生成代码]
+  L1 --> L2[同一 LLM：仔细检查<br/>风格 / 效率 / 建设性质疑]
+  L2 --> L3[据批评改代码]
+  L3 --> O([更好版本])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  class U,O user
+  class L1,L2,L3 llm
+```
+
+也可接入外部信号：跑代码看报错 → 喂回 LLM → 出 V3。  
+**不是魔法**，不能保证 100%，但常能 **小幅抬性能**。
+
+可演进为双 Agent：写码 Agent + **Critic Agent**（人设=挑错/跑单测）来回迭代（见 §9.4）。
+
+### 9.2 Tool Use（工具使用）
+
+给 LLM **可调用的函数**，由其决定何时调用：
+
+| 问法 | 工具 | 结果 |
+| --- | --- | --- |
+| 评测里最好的咖啡机？ | 网页搜索 | 比纯背训练数据准 |
+| 100 美元复利算多少？ | 代码执行 | 写代码再跑出答案 |
+
+工具覆盖：数学/数据分析、网页与数据库取数、邮件日历等生产力、图像处理……  
+**决定调什么工具** = 能办更多事。
+
+### 9.3 Planning（规划）
+
+**由 LLM 决定步骤序列**（而非工程师写死），课例 HuggingGPT：
+
+> 生成「女孩读书、姿势与图中男孩相同」的图，再用语音描述新图。
+
+```mermaid
+flowchart LR
+  U([复杂请求]) --> Plan[LLM 规划步骤]
+  Plan --> A1[姿态估计·男孩]
+  A1 --> A2[按姿态生成女孩图]
+  A2 --> A3[图→文]
+  A3 --> A4[文→语音]
+  A4 --> O([完成])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class U,O user
+  class Plan llm
+  class A1,A2,A3,A4 tool
+```
+
+今日规划型 Agent：**更难控、偏实验**，但有时效果惊喜。
+
+### 9.4 Multi-agent（多 Agent 协作）
+
+像项目经理雇多人：多个 LLM，各带 **角色人设**，协作完成复杂任务。
+
+**ChatDev**（陈芊等）：CEO / Programmer / Tester / Designer… 像虚拟软件公司一起做开发任务。
+
+**营销手册** 也可拆三人组：
+
+```mermaid
+flowchart LR
+  Task([写营销手册]) --> R[研究员<br/>上网调研]
+  R --> M[营销写手<br/>写文案]
+  M --> E[编辑<br/>润色]
+  E --> O([成稿])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  class Task,O user
+  class R,M,E llm
+```
+
+更难事先知道会怎么走 → **更难控**；研究显示在传记写作、棋步决策等复杂任务上可更好。课程后文会展开。
+
+---
+
+## 10. 带走（Module 1）
+
+```mermaid
+mindmap
+  root((Agentic M1))
     程度不是开关
       低 / 半 / 高
-      谁定下一步
-    三大优势
-      效果常超换代
-      并行快于人
-      组件可换
+    优势
+      效果·并行·模块化
     落地
-      先 SOP + 文本
-      拆步再实现
-      Computer Use 往后放
+      SOP + 文本优先
+    拆步
+      LLM/工具能否做
+      不能再按人拆
+      积木排序
+    Evals
+      先建再找坑
+      客观代码 / 主观 Judge
+      端到端 + 组件级
+      读 traces
+    四大模式
+      Reflection
+      Tool Use
+      Planning
+      Multi-agent
+    下一模块
+      深挖 Reflection
 ```
