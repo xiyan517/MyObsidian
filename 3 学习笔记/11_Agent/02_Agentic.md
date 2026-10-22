@@ -1,5 +1,5 @@
 ---
-title: Agentic — Module 1 总览
+title: Agentic — 吴恩达课程笔记
 aliases:
   - agentic
   - 自主性谱系
@@ -13,12 +13,13 @@ aliases:
   - evals
   - LLM as judge
   - reflection
+  - 反射设计模式
   - tool use
   - planning
   - multi-agent
   - 吴恩达 Agentic AI
 created: 2026-10-21
-updated: 2026-10-21
+updated: 2026-10-22
 tags:
   - type/literature-note
   - topic/agent
@@ -27,12 +28,18 @@ tags:
   - status/draft
 ---
 
-# Agentic：Module 1 总览
+# Agentic：吴恩达课程笔记
 
 > [!summary]
-> **agentic** 是程度不是开关。优势：效果 / 并行 / 模块化。落地先 SOP+文本。关键三技能：**拆步**（LLM/工具能否做？不能再拆）、**Evals**（先建再看输出找坑；客观用代码、主观用 LLM-as-judge；端到端 + 组件级 + 读 traces）、**四大设计模式**（Reflection / Tool Use / Planning / Multi-agent）。下一模块深挖 Reflection。
+> **agentic** 是程度不是开关。优势：效果 / 并行 / 模块化。落地先 SOP+文本。关键三技能：**拆步**、**Evals**、**四大设计模式**。Module 2 起深挖 **Reflection**：草稿→反思→改稿；有外部反馈（如跑代码报错）时显著更强。
 
-来源：吴恩达 《Agentic AI》· P03–P08（Module 1）
+来源：吴恩达 《Agentic AI》· P03–P09
+
+---
+
+# Module 1 总览
+
+来源：P03–P08
 
 > [!tip] 读图颜色（课内约定）
 > 🔴 用户输入　⚪ LLM　🟢 工具/其它软件
@@ -634,7 +641,8 @@ flowchart LR
 也可接入外部信号：跑代码看报错 → 喂回 LLM → 出 V3。  
 **不是魔法**，不能保证 100%，但常能 **小幅抬性能**。
 
-可演进为双 Agent：写码 Agent + **Critic Agent**（人设=挑错/跑单测）来回迭代（见 §9.4）。
+可演进为双 Agent：写码 Agent + **Critic Agent**（人设=挑错/跑单测）来回迭代（见 §9.4）。  
+→ 展开见 **Module 2 §11–15**（P09）。
 
 ### 9.2 Tool Use（工具使用）
 
@@ -725,4 +733,168 @@ mindmap
       Multi-agent
     下一模块
       深挖 Reflection
+```
+
+---
+
+# Module 2：反射设计模式（Reflection）
+
+来源：P09 · 通过反射提升任务输出质量
+
+> [!summary]
+> Reflection = **生成初稿 →（同一或另一）LLM 反思并改稿**。实现简单、用途广。关键设计点：能塞进 **外部新信息**（跑代码输出/报错等）时，远比纯自省更强。不是魔法——常是 **小幅抬性能**，不能保 100%。
+
+> [!tip] 读图颜色（同 Module 1）
+> 🔴 用户输入　⚪ LLM　🟢 工具/其它软件
+
+---
+
+## 11. 核心想法：像人改稿一样
+
+人写邮件常：打得快 → 初稿差 → 自己重读发现问题 → 改成更好版本。
+
+课例（约汤米吃饭）：
+
+| 初稿问题 | 改后 |
+| --- | --- |
+| 「下个月」时间含糊 | 具体到 5–7 号 |
+| 笔误 | 修正 |
+| 忘署名 | 补上 |
+
+LLM 可走同一套：
+
+```mermaid
+flowchart LR
+  U([任务]) --> L1[LLM · 写 Email v1]
+  L1 --> L2[同一 LLM · 不同 prompt<br/>反思并改进]
+  L2 --> O([Email v2])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  class U,O user
+  class L1,L2 llm
+```
+
+- 工作流可 **硬编码**：先 prompt 一次生成，再 prompt 一次「反思并改进」
+- 第二次可用 **同一模型**，换一套反思向的 prompt
+
+> [!note]
+> 课里把这一步叫 Reflection；和 Module 1 §9.1 是同一模式，这里展开实现与设计取舍。
+
+---
+
+## 12. 不止邮件：写代码同样适用
+
+```mermaid
+flowchart LR
+  U([写某功能]) --> L1[LLM · Code v1]
+  L1 --> L2[同一或另一 LLM<br/>查 bug → 写改进稿]
+  L2 --> O([Code v2])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  class U,O user
+  class L1,L2 llm
+```
+
+### 12.1 可按专长拆模型
+
+不同 LM **强弱不同** → 初稿与反思可用不同模型。
+
+| 阶段 | 常见选型 | 原因 |
+| --- | --- | --- |
+| 初稿 | 直接生成（普通 chat 模型） | 先快速出 v1 |
+| 反思 / 查 bug | **推理模型**（reasoning / thinking models） | 找 bug 往往更强 |
+
+```mermaid
+flowchart LR
+  U([写代码]) --> L1[普通模型 · 直接生成 v1]
+  L1 --> L2[推理模型 · 查 bug / 改稿]
+  L2 --> O([更好的 v2])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  class U,O user
+  class L1,L2 llm
+```
+
+---
+
+## 13. 关键设计点：外部反馈让反射更强
+
+仅让 LLM「对着自己的输出反思」有用；若还能注入 **模型外部的新信息**，反射会 **强得多**。
+
+写代码时最典型：
+
+```mermaid
+flowchart TB
+  U([任务]) --> L1[LLM 生成 Code v1]
+  L1 --> Run[🟢 执行代码]
+  Run --> FB[输出 / 报错日志]
+  FB --> L2[LLM：据反馈反思 → 写新稿]
+  L2 --> O([Code v2 · 往往好很多])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class U,O user
+  class L1,L2 llm
+  class Run,FB tool
+```
+
+课例：v1 一跑就是 **语法错误** → 把代码 + 错误日志喂回 → 再反思改稿 → v2 明显更好。
+
+| 反射输入 | 力度 |
+| --- | --- |
+| 仅初稿 +「请改进」 | 有帮助 |
+| 初稿 + **执行结果 / 报错** 等外部信息 | **深得多**，更容易定位问题 |
+
+> [!important]
+> **设计口诀：只要反射步骤有机会拿到额外外部信息，就尽量接进去。** 这是本模式最关键的设计考量。
+
+---
+
+## 14. 预期与边界
+
+```mermaid
+flowchart LR
+  A[直接生成] -->|+ Reflection| B[常小幅提升]
+  B -.->|有外部反馈| C[提升更明显]
+  C -.->|仍非| D[100% 正确]
+  style A fill:#e5e7eb
+  style B fill:#fef08a
+  style C fill:#bbf7d0
+  style D fill:#fecaca
+```
+
+| 说法 | 课里态度 |
+| --- | --- |
+| Reflection 是魔法？ | ❌ 不是 |
+| 能否永远做对？ | ❌ 不能保证 100% |
+| 实际价值 | 常给 **modest bump**（适度抬升） |
+| 何时特别值得 | 能注入外部反馈时 |
+
+下一讲预告：系统对比 **Reflection vs 直接生成（zero-shot prompting）**。
+
+---
+
+## 15. 带走（Module 2 · 本讲）
+
+```mermaid
+mindmap
+  root((Reflection P09))
+    流程
+      初稿 v1
+      反思 prompt
+      改进稿 v2
+    实现
+      可硬编码两步
+      同模或异模
+      推理模擅查 bug
+    外部反馈
+      跑代码 / 看报错
+      新信息 → 反射更强
+    预期
+      小幅抬性能
+      非 100%
 ```
