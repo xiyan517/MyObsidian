@@ -31,9 +31,9 @@ tags:
 # Agentic：吴恩达课程笔记
 
 > [!summary]
-> **agentic** 是程度不是开关。优势：效果 / 并行 / 模块化。落地先 SOP+文本。关键三技能：**拆步**、**Evals**、**四大设计模式**。Module 2：**Reflection**（有外部反馈 ≫ 纯自省）；prompt 调到平台期就加反射/外部反馈；evals 量化；下一模块 **Tool Use**。
+> **agentic** 是程度不是开关。落地先 SOP+文本。关键：**拆步**、**Evals**、四大模式。M2 Reflection（外部反馈 ≫ 自省）。M3 **Tool Use**：工具=可请求调用的**函数**；由 LLM **决定是否/何时**调用（非工程师硬编码）。
 
-来源：吴恩达 《Agentic AI》· P03–P13
+来源：吴恩达 《Agentic AI》· P03–P14
 
 ---
 
@@ -654,7 +654,7 @@ flowchart LR
 | 100 美元复利算多少？ | 代码执行 | 写代码再跑出答案 |
 
 工具覆盖：数学/数据分析、网页与数据库取数、邮件日历等生产力、图像处理……  
-**决定调什么工具** = 能办更多事。
+**决定调什么工具** = 能办更多事。→ 展开见 **Module 3 §21+**（P14）。
 
 ### 9.3 Planning（规划）
 
@@ -1244,4 +1244,120 @@ mindmap
       主观·rubric+0/1
     下一模块
       Tool Use
+```
+
+---
+
+# Module 3：工具使用（Tool Use）
+
+来源：P14 · 什么是工具？
+
+> [!summary]
+> **工具 = 提供给 LLM、可由其请求调用的函数。**  
+> 精确说法是 LLM **请求调用**，不是自己直接执行。是否调用、调哪个，交给 LLM 判断（对比工程师硬编码「这一步必搜网」）。
+
+> [!tip] 读图颜色
+> 🔴 用户输入　⚪ LLM　🟢 工具/函数　（课内：LLM 上方虚线框 = 已挂工具箱，可选调用）
+
+---
+
+## 21. 什么是工具？（P14）
+
+人有锤子钳子能干更多事；LLM 的「工具」不是五金，而是 **函数**——用来做事、取信息等。
+
+### 21.1 动机：训练切面以外的信息
+
+问「现在几点？」——数月前训好的模型 **不知道当前时刻**，也不该瞎编。  
+若提供 `getCurrentTime` 函数，就能给出有用回答。
+
+### 21.2 调用回路（单工具）
+
+```mermaid
+flowchart LR
+  U([现在几点?]) --> L1[LLM 看工具箱<br/>决定调用 getCurrentTime]
+  L1 --> T[🟢 getCurrentTime]
+  T --> H[结果写入对话历史]
+  H --> L2[LLM 生成答复<br/>如 下午 3:20]
+  L2 --> O([输出])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class U,O user
+  class L1,L2 llm
+  class T,H tool
+```
+
+步骤：输入 → LLM 查看可用工具 → **决定调用** → 函数返回值 → **回填历史** → LLM 再生成最终输出。
+
+### 21.3 关键：由 LLM 决定「用不用」
+
+同一套工具，问「绿茶含多少咖啡因？」——不必知当前时间 → **直接作答**，不调用 `getCurrentTime`。
+
+| 对比 | 谁决定 |
+| --- | --- |
+| 早期研究 Agent「这一步必网页搜索」 | **工程师硬编码** |
+| Tool Use（虚线框工具箱） | **LLM 自行选择** 调哪些、是否调 |
+
+> [!note]
+> 课内记号：LLM 上方 **虚线框** = 已提供一个或多个工具，由模型在适当时选用。
+
+### 21.4 更多单工具场景
+
+| 用户意图 | 可能调用的工具 | 作用 |
+| --- | --- | --- |
+| Mountain View 附近泰国餐厅 | 网页搜索 | 用实时检索结果作答 |
+| 买过白色墨镜的客户 | 查数据库 | 查销售表再生成回答 |
+| $500、10 年、5% 复利 | 利率计算函数；或 **写数学表达式再求值** | 算出准确数字 |
+
+> [!tip]
+> 开发者职责：想清应用要办什么事 → **实现并挂上** 相应函数，让 LLM 选用（餐厅推荐 / 零售问答 / 理财助手等工具集可不同）。
+
+### 21.5 多工具：日历助手
+
+请求：「周四找空档，和 Alice 约个会。」
+
+可用工具例如：`makeAppointment`（发邀请）、`checkCalendar`（查空档）、`deleteAppointment`（取消）。
+
+```mermaid
+flowchart TB
+  U([周四约 Alice]) --> L1[LLM：先 checkCalendar]
+  L1 --> C[🟢 查日历 → 周四空档]
+  C --> L2[LLM：选 3pm<br/>再 makeAppointment]
+  L2 --> A[🟢 发邀请 + 写入日历]
+  A --> L3[LLM 告知用户]
+  L3 --> O([周四 3pm 已约好 Alice])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class U,O user
+  class L1,L2,L3 llm
+  class C,A tool
+```
+
+可一次挂 **多个** 函数，由 LLM 选顺序、选哪个——这会大幅增强应用能力。
+
+下一讲：如何 **写函数 / 造工具** 并挂给 LLM。
+
+---
+
+## 22. 带走（Module 3 · 本讲）
+
+```mermaid
+mindmap
+  root((Tool Use P14))
+    定义
+      工具=函数
+      LLM 请求调用
+    回路
+      决定→执行→回填→作答
+    自主
+      用不用由 LLM 定
+      ≠ 硬编码必调
+    例子
+      时间/搜索/库/计算
+      多工具·日历
+    开发者
+      按应用造工具箱
 ```
