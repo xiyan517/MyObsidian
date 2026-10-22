@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "8 感悟/炒股反思.md",
+                "file": "3 学习笔记/11_Agent/02_Agentic.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "炒股反思"
+              "title": "02_Agentic"
             }
           }
         ]
@@ -188,8 +188,13 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
-    "3 学习笔记/11_Agent/02_Agentic.md",
+    "临时文件/_patch_notes_p11.py",
+    "临时文件/P011-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p11 3-图表生成工作流程 [BV1AJen6SEVQ_p11].zh.srt",
+    "临时文件/_patch_notes_p10.py",
+    "临时文件/_tail_debug.txt",
+    "临时文件/P010-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p10 2-为什么不直接生成呢？ [BV1AJen6SEVQ_p10].zh.srt",
     "8 感悟/炒股反思.md",
+    "3 学习笔记/11_Agent/02_Agentic.md",
     "8 感悟",
     "临时文件/P008-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p08 8-智能体设计模式 [BV1AJen6SEVQ_p8].zh.srt",
     "临时文件/P007-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p07 7-智能体AI评估（evals） [BV1AJen6SEVQ_p7].zh.srt",
@@ -197,11 +202,8 @@
     "临时文件/P006-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p06 6-任务分解：识别工作流中的步骤 [BV1AJen6SEVQ_p6].zh.srt",
     "临时文件/P005-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p05 5-智能体AI应用 [BV1AJen6SEVQ_p5].zh.srt",
     "3 学习笔记/11_Agent/P005-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p05 5-智能体AI应用 [BV1AJen6SEVQ_p5].zh.srt",
-    "临时文件/P004-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p04 4-智能体AI的优势 [BV1AJen6SEVQ_p4].zh.srt",
-    "临时文件/P003-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p03 3-自主性程度 [BV1AJen6SEVQ_p3].zh.srt",
     "3 学习笔记/11_Agent/01_Deepseek Harness.md",
     "0 草稿箱/链接.md",
-    "3 学习笔记/11_Agent",
     "3 学习笔记/01_RAG/02_Langchain.md",
     "3 学习笔记/01_RAG/04_Chains.md",
     "3 学习笔记/01_RAG/杂项.md",
@@ -212,7 +214,6 @@
     "3 学习笔记/60_UE/UE5入门.md",
     "3 学习笔记/04_AIGC/01_Stable Diffusion.md",
     "3 学习笔记/99_其他/01_obsidian入门.md",
-    "临时文件/2. 中英文提示词插件 — 打造个性化提示词库.zh.srt",
     "3 学习笔记/04_AIGC/02_文生图参数与快速出图.md",
     "3 学习笔记/04_AIGC/assets/02-upscalers.png",
     "3 学习笔记/04_AIGC/assets/03-sampler-recommend.png",
@@ -225,7 +226,6 @@
     "3 学习笔记/01_RAG/03_Prompt Templates.md",
     "7 常用命令/Python.md",
     "7 常用命令/NSSM.md",
-    "7 常用命令/Git.md",
     "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
     "3 学习笔记/01_RAG/assets/828c974b-b4cb-413e-8aaf-18249cfe50ee.png",
     "3 学习笔记/01_RAG/assets/16-langgraph-graph.png",
