@@ -31,9 +31,9 @@ tags:
 # Agentic：吴恩达课程笔记
 
 > [!summary]
-> **agentic** 是程度不是开关。落地先 SOP+文本。关键：**拆步**、**Evals**、四大模式。M2 Reflection（外部反馈 ≫ 自省）。M3 **Tool Use**：工具=可请求调用的**函数**；由 LLM **决定是否/何时**调用（非工程师硬编码）。
+> **agentic** 是程度不是开关。落地先 SOP+文本。关键：**拆步**、**Evals**、四大模式。M2 Reflection。M3 **Tool Use**：现代 API（如 AI Suite）用 JSON schema + docstring 挂工具；**代码执行**极强但宜沙箱；下一讲 MCP。
 
-来源：吴恩达 《Agentic AI》· P03–P14
+来源：吴恩达 《Agentic AI》· P03–P17
 
 ---
 
@@ -1250,11 +1250,10 @@ mindmap
 
 # Module 3：工具使用（Tool Use）
 
-来源：P14 · 什么是工具？
+来源：P14–P17
 
 > [!summary]
-> **工具 = 提供给 LLM、可由其请求调用的函数。**  
-> 精确说法是 LLM **请求调用**，不是自己直接执行。是否调用、调哪个，交给 LLM 判断（对比工程师硬编码「这一步必搜网」）。
+> **工具 = 函数**；LLM 请求调用。旧式 `FUNCTION:` 讲机制；现代用 **JSON schema**（AI Suite 可从 docstring 自动生成）。**代码执行**是特殊万能工具（写代码再跑）——宜沙箱（Docker / E2B）；失败可把报错喂回做反射。
 
 > [!tip] 读图颜色
 > 🔴 用户输入　⚪ LLM　🟢 工具/函数　（课内：LLM 上方虚线框 = 已挂工具箱，可选调用）
@@ -1338,26 +1337,212 @@ flowchart TB
 
 可一次挂 **多个** 函数，由 LLM 选顺序、选哪个——这会大幅增强应用能力。
 
-下一讲：如何 **写函数 / 造工具** 并挂给 LLM。
+→ 机制拆解见下节（P15）。
 
 ---
 
-## 22. 带走（Module 3 · 本讲）
+## 22. 创建工具（P15）
+
+LLM 本质是 **生成文本 token**——那它怎么「调函数」？本讲用 **早期手写 prompt 协议** 讲清全流程（今日模型已原生训练会用工具，下一讲现代语法；旧法仍利于理解）。
+
+### 22.1 核心真相
+
+> [!important]
+> LLM **从不直接调用函数**。它只输出约定格式的文本 → **你的代码**识别、代为执行、把返回值塞回对话史 → LLM 再往下生成。
+
+### 22.2 旧式协议：无参 `getCurrentTime`
+
+1. **实现函数**（如返回当前时间）  
+2. **在 prompt 里告知工具**，并规定输出格式，例如：
+
+> 你有工具 `getCurrentTime`。要用时请输出：`FUNCTION: getCurrentTime`（全大写 FUNCTION）。我一看到就知道你要我代调。
+
+3. 用户问「现在几点？」→ LLM 输出 `FUNCTION: getCurrentTime`  
+4. **你的代码**扫描输出 → 解析函数名 → 真正调用 → 得到如 `8am`  
+5. **你的代码**把 `8am` 写回对话史（含：用户问、请求调用、函数结果）  
+6. LLM 看到完整历史 → 最终答：「现在是早上 8 点。」
+
+```mermaid
+flowchart TB
+  U([现在几点?]) --> L1[LLM 输出<br/>FUNCTION: getCurrentTime]
+  L1 --> Dev[开发者代码<br/>解析 → 代调函数]
+  Dev --> T[🟢 getCurrentTime → 8am]
+  T --> Hist[结果写回对话史]
+  Hist --> L2[LLM 生成最终答复]
+  L2 --> O([现在是 8am])
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class U,O user
+  class L1,L2 llm
+  class Dev,T,Hist tool
+```
+
+多工具时同理：约定输出 `FUNCTION: <名字>`（及参数），由你的代码按名分发。
+
+### 22.3 带参数：时区版
+
+`getCurrentTime(timezone)`——问「新西兰现在几点？」（给那边的阿姨打电话前先查）。
+
+Prompt 大意：可用该工具；输出形如 `FUNCTION: getCurrentTime` + 时区。  
+LLM 可能输出：`FUNCTION: getCurrentTime Pacific/Auckland`（奥克兰时区）。  
+你的代码取出参数 → 调用 → 如 `4am` → 回填 → LLM：「新西兰现在凌晨 4 点。」
+
+> [!note]
+> 课里是缩写 prompt；实战要写清函数做什么、怎么用、参数格式等。
+
+### 22.4 流程小结
+
+| 步 | 谁做 | 做什么 |
+| --- | --- | --- |
+| ① 提供工具 | 开发者 | 实现函数 + 告诉 LLM 可用（及格式） |
+| ② 请求调用 | LLM | 生成约定格式文本（非真执行） |
+| ③ 代调 | 开发者代码 | 解析 → 调函数 → 取返回值 |
+| ④ 回填 | 开发者代码 | 把结果写入对话史 |
+| ⑤ 继续 | LLM | 最终作答；**或再请求调另一个工具**，循环 |
+
+> [!warning]
+> `FUNCTION:` 全大写这套有点笨——是 **原生工具调用训练之前** 的做法。现代语法见下节（P16）。
+
+---
+
+## 23. 工具语法（P16）
+
+课用开源库 **AI Suite**（吴恩达等做的多厂商统一封装；语法接近 OpenAI）。
+
+> [!note]
+> 口语常说「LLM 调了工具」——严格说仍是 **请求你代调**；开发者圈子里简写成「调用」即可。
+
+### 23.1 调用长什么样
+
+大致等价于：
+
+```text
+response = client.chat.completions.create(
+  model=...,          # 如 GPT-4o
+  messages=...,
+  tools=[getCurrentTime, ...],
+  max_turns=5         # 连续请求工具的上限，防死循环
+)
+```
+
+| 参数 | 作用 |
+| --- | --- |
+| `tools` | 挂给 LLM 的函数列表 |
+| `max_turns` | 工具返回后 LLM 可能再请求下一个……设上限（课里常设 5）；正常很少顶满 |
+
+细节在 coding lab 里再练；不必一次背完。
+
+### 23.2 自动描述：docstring → JSON schema
+
+AI Suite 会从函数的 **docstring** 抽出说明，生成传给模型的 **JSON schema**（函数名、描述、参数）。  
+→ 不必再手写一大段「你有工具 getCurrentTime…」。
+
+有参版（时区）同理：schema 里带上参数文档，模型才知道该填 `America/New_York`、`Pacific/Auckland` 等。
+
+| 做法 | 说明 |
+| --- | --- |
+| AI Suite | **自动**从 docstring 建 schema，且常在同一次 `create` 里 **代调函数并回填** |
+| 部分其它 API | 需 **手动** 拼 JSON schema；有的还要自己写代调循环 |
+
+```mermaid
+flowchart LR
+  Fn[Python 函数<br/>+ docstring] --> Schema[JSON schema]
+  Schema --> LLM[LLM 决定是否请求]
+  LLM --> Suite[AI Suite 代调 + 回填]
+  Suite --> Out[最终 response]
+```
+
+挂几个函数后，模型会自己去「办事 / 取信息」——没玩过会觉得很酷。
+
+### 23.3 预告：代码执行是特殊工具
+
+所有工具里有一个特别强：**代码执行**——让 LLM **写代码**，你提供「执行这段代码」的工具。代码能干很多事 → 下一讲专讲。
+
+---
+
+## 24. 代码执行（P17）
+
+课里多次被 LLM 写出的巧妙代码方案 **惊到并开心**——若还没用过，值得一试。
+
+### 24.1 为何不给「加减乘除」各做一个工具？
+
+数学应用若只挂 `add` / `sub` / `mul` / `div`：  
+「13.2+18.9」够用；「√2」又要新工具；再要指数……科学计算器一堆按钮，**工具永远不够**。
+
+→ 换思路：让它 **写代码并执行**。
+
+### 24.2 基本回路
+
+Prompt 大意：写代码解用户问题；用标签包起来，例如：
+
+```text
+<execute_python>
+...代码...
+</execute_python>
+```
+
+```mermaid
+flowchart LR
+  Q([√2 是多少?]) --> L1[LLM 写出 Python]
+  L1 --> Ext[正则抽出标签内代码]
+  Ext --> Run[🟢 执行 → 1.414…]
+  Run --> L2[LLM 润色成自然语言答案]
+
+  classDef user fill:#fecaca,stroke:#b91c1c
+  classDef llm fill:#e5e7eb,stroke:#6b7280
+  classDef tool fill:#bbf7d0,stroke:#15803d
+  class Q user
+  class L1,L2 llm
+  class Ext,Run tool
+```
+
+复利等更难的计算，同样可写代码精确算。  
+与 Reflection 衔接：执行 **失败** 时把报错喂回 → 改代码再试一两轮，常更准。
+
+### 24.3 怎么执行？安全第一
+
+| 方式 | 说明 |
+| --- | --- |
+| Python `exec()` | 内置、强大；有安全隐患 |
+| **沙箱** | 更稳妥：Docker、E2B 等轻量沙箱 |
+
+> [!warning] 真实事故（课内）
+> 高度 agentic 的写码助手曾在项目目录执行类似删光 `*.py` 的操作，事后还道歉。有 GitHub 备份才没酿大祸。
+
+| 态度 | 课里说法 |
+| --- | --- |
+| 单行风险 | 通常不算极高；很多开发者未经细查就跑 |
+| **Best practice** | 在 **沙箱** 里跑，降低丢数据 / 泄密风险 |
+
+训练方也常为「代码执行好不好用」做专门优化——值得作为常备工具之一。
+
+### 24.4 下一讲：MCP
+
+目前工具要 **一个个自己造、自己挂**。很多团队重复造轮子。  
+新标准 **MCP（Model Context Protocol）** 让开发者更容易拿到一大套现成工具 → 下一讲。
+
+---
+
+## 25. 带走（Module 3 · 迄今）
 
 ```mermaid
 mindmap
-  root((Tool Use P14))
-    定义
-      工具=函数
-      LLM 请求调用
-    回路
-      决定→执行→回填→作答
-    自主
-      用不用由 LLM 定
-      ≠ 硬编码必调
-    例子
-      时间/搜索/库/计算
-      多工具·日历
-    开发者
-      按应用造工具箱
+  root((Tool Use P14–P17))
+    机制
+      LLM 只请求
+      代码代调回填
+    现代语法
+      JSON schema
+      docstring→描述
+      AI Suite / OpenAI 风
+      max_turns 防死循环
+    代码执行 ★
+      胜于堆专用算子
+      标签抽出→执行
+      失败可反射重试
+      宜沙箱 Docker/E2B
+    下一讲
+      MCP
 ```
