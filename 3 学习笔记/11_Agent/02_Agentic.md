@@ -31,9 +31,9 @@ tags:
 # Agentic：吴恩达课程笔记
 
 > [!summary]
-> **agentic** 是程度不是开关。落地先 SOP+文本。关键：**拆步**、**Evals**、四大模式。M2 Reflection。M3 **Tool Use**：现代 API（如 AI Suite）用 JSON schema + docstring 挂工具；**代码执行**极强但宜沙箱；下一讲 MCP。
+> **agentic** 是程度不是开关。落地先 SOP+文本。关键：**拆步**、**Evals**、四大模式。M2 Reflection。M3 **Tool Use**（含代码执行沙箱）+ **MCP**（M+N 替代 M×N）。下一模块：**Evals / 错误分析**（吴恩达称或为本课最重要模块）。
 
-来源：吴恩达 《Agentic AI》· P03–P17
+来源：吴恩达 《Agentic AI》· P03–P18
 
 ---
 
@@ -1250,10 +1250,10 @@ mindmap
 
 # Module 3：工具使用（Tool Use）
 
-来源：P14–P17
+来源：P14–P18
 
 > [!summary]
-> **工具 = 函数**；LLM 请求调用。旧式 `FUNCTION:` 讲机制；现代用 **JSON schema**（AI Suite 可从 docstring 自动生成）。**代码执行**是特殊万能工具（写代码再跑）——宜沙箱（Docker / E2B）；失败可把报错喂回做反射。
+> **工具 = 函数**；现代 JSON schema 挂载；**代码执行**宜沙箱。**MCP**：Anthropic 提出、多方采用；把社区对接成本从 **M×N → M+N**（Client 消费 / Server 提供 tools & resources）。Module 3 完 → 下一模块 Evals。
 
 > [!tip] 读图颜色
 > 🔴 用户输入　⚪ LLM　🟢 工具/函数　（课内：LLM 上方虚线框 = 已挂工具箱，可选调用）
@@ -1521,28 +1521,85 @@ flowchart LR
 ### 24.4 下一讲：MCP
 
 目前工具要 **一个个自己造、自己挂**。很多团队重复造轮子。  
-新标准 **MCP（Model Context Protocol）** 让开发者更容易拿到一大套现成工具 → 下一讲。
+→ MCP 见下节（P18）。
 
 ---
 
-## 25. 带走（Module 3 · 迄今）
+## 25. MCP（P18）
+
+**MCP（Model Context Protocol）**：Anthropic 提出，现已被多家公司与大量开发者采用——给 LLM 更多 **上下文** 与 **工具**。生态在长，学会它等于多一条资源通道。
+
+### 25.1 痛点：M × N
+
+每个应用各自包一层 Slack / Google Drive / GitHub / Postgres……  
+另一团队做另一应用，又重复包一遍。
+
+| | 工作量 |
+| --- | --- |
+| 无标准 | **M 个应用 × N 个工具** = 社区总工时爆炸 |
+| 有 MCP | **M + N**（应用对接标准；工具方实现一次 Server） |
+
+```mermaid
+flowchart LR
+  subgraph 以前
+    A1[App1] --> S[Slack]
+    A1 --> G[Drive]
+    A2[App2] --> S
+    A2 --> G
+  end
+  subgraph MCP后
+    C1[Client App] --> Std[MCP 标准]
+    C2[Client App] --> Std
+    Std --> SV1[Server·Slack]
+    Std --> SV2[Server·Drive]
+  end
+```
+
+### 25.2 Client / Server / Resources
+
+| 角色 | 是什么 |
+| --- | --- |
+| **MCP Client** | 需要工具/数据的应用（你的 Agent 也可以是 Client） |
+| **MCP Server** | 封装数据源或动作（Slack / GitHub / Drive…）对外提供能力 |
+| **Resources**（文档用语） | 偏 **取数 / 给上下文** 的一类能力；MCP 也支持更一般的 **函数/动作** |
+
+初期设计更强调「给 LLM 更多 context、取数据」；今天两者都有，Client / Server 列表都在快速增长。  
+你可做 Client；若要给别人提供能力，也可做 Server。
+
+### 25.3 课例：Claude Desktop + GitHub MCP Server
+
+| 用户说 | Client 经 Server 做什么 | LLM 再做什么 |
+| --- | --- | --- |
+| 总结某仓库的 README.md（如 AI Suite） | 请求拉取该文件 → 长文本当 context | 生成摘要 |
+| 最新有哪些 PR？ | 另一工具：按更新排序 list PR（如 20 条） | 写成文字摘要 |
+
+同一 Server 上多个工具，由 LLM 按问题选用。
+
+> [!tip]
+> 想深挖协议本身：DeepLearning.AI 另有 MCP 短课，可在本课之后选修。
+
+### 25.4 Module 3 收束 → 下一模块
+
+工具用好了，Agent 会强很多。  
+下一模块：**评估与错误分析（Evals）**——吴恩达认为，能高效落地 agentic 与否，很大程度取决于是否有 **有纪律的评估流程**；并称接下来或是 **整门课最重要的模块**。
+
+---
+
+## 26. 带走（Module 3 完）
 
 ```mermaid
 mindmap
-  root((Tool Use P14–P17))
+  root((Tool Use M3 完))
     机制
-      LLM 只请求
-      代码代调回填
+      请求→代调→回填
     现代语法
-      JSON schema
-      docstring→描述
-      AI Suite / OpenAI 风
-      max_turns 防死循环
-    代码执行 ★
-      胜于堆专用算子
-      标签抽出→执行
-      失败可反射重试
-      宜沙箱 Docker/E2B
-    下一讲
-      MCP
+      JSON schema / docstring
+    代码执行
+      沙箱 Docker/E2B
+    MCP
+      M+N 非 M×N
+      Client / Server
+      resources + tools
+    下一模块
+      Evals · 错误分析
 ```
