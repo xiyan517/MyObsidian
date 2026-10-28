@@ -1,0 +1,192 @@
+1
+00:00:00,000 --> 00:00:04,600
+Welcome to Agentic Knowledge Draft Construction, built in partnership with Neo4j.
+
+2
+00:00:05,100 --> 00:00:11,780
+In this course, you design a multi-agent system that transforms your structured and unstructured data into a knowledge draft.
+
+3
+00:00:12,180 --> 00:00:15,680
+I found knowledge drafts really useful for high-stakes applications,
+
+4
+00:00:16,000 --> 00:00:20,120
+where accuracy of the information we store and retrieve is important.
+
+5
+00:00:20,500 --> 00:00:25,240
+This course will teach you why, and also give you a great set of tools for building these knowledge drafts.
+
+6
+00:00:25,900 --> 00:00:29,280
+I'm delighted that the instructor for this course is Andres Colleger,
+
+7
+00:00:29,280 --> 00:00:33,680
+who is a Developer Evangelist for Genes of AI at Neo4j.
+
+8
+00:00:34,380 --> 00:00:38,480
+Thanks, Andrew. I'm excited to be back here and to work with you on this course.
+
+9
+00:00:39,080 --> 00:00:44,380
+Similar to RAG, a knowledge draft system splits your text documents into chunks
+
+10
+00:00:44,380 --> 00:00:46,460
+and stores them in the vector database.
+
+11
+00:00:46,880 --> 00:00:51,180
+But in addition to that, it places the chunks into a graph structure,
+
+12
+00:00:51,400 --> 00:00:55,000
+which a chunk is linked to entities extracted from the chunks.
+
+13
+00:00:55,360 --> 00:00:58,180
+For example, a text chunk from a product review
+
+14
+00:00:58,180 --> 00:01:03,020
+can contain entities such as product orders or delivery issues or product defects.
+
+15
+00:01:03,280 --> 00:01:06,860
+To build a knowledge draft, you extract the relevant entities from the chunks,
+
+16
+00:01:07,040 --> 00:01:10,860
+then connect the chunks and the entities in the graph through edges.
+
+17
+00:01:11,600 --> 00:01:14,540
+Here, each edge represents a relationship. For example,
+
+18
+00:01:15,060 --> 00:01:17,760
+maybe it represents that this chunk mentioned a certain product,
+
+19
+00:01:17,760 --> 00:01:24,320
+or that that product has an issue. The entities are retrieved alongside the relevant chunks
+
+20
+00:01:24,320 --> 00:01:30,960
+to provide more relevant context to the LLM to generate more precise and accurate answers.
+
+21
+00:01:31,500 --> 00:01:36,820
+You can also connect this type of graph to another graph containing additional information
+
+22
+00:01:36,820 --> 00:01:40,440
+extracted from structured data such as CSE files.
+
+23
+00:01:41,180 --> 00:01:45,300
+In this course, Andreas will walk you through how to build a multi-agent system
+
+24
+00:01:45,300 --> 00:01:48,760
+that helps you do all this work of constructing this type of knowledge graph.
+
+25
+00:01:48,960 --> 00:01:52,880
+To transform your structured and unstructured data into a knowledge graph,
+
+26
+00:01:53,180 --> 00:01:55,560
+you first need to decide on the graph schema,
+
+27
+00:01:56,080 --> 00:01:59,720
+meaning what types of entities or nodes you can extract from the data
+
+28
+00:01:59,720 --> 00:02:04,480
+and what relationships exist between them. Once you have the schema defined,
+
+29
+00:02:04,840 --> 00:02:08,080
+you can construct the actual graph and store it in a graph database.
+
+30
+00:02:08,400 --> 00:02:11,240
+Instead of mainly looking at your data to find the graph schema,
+
+31
+00:02:11,600 --> 00:02:15,580
+you'll design a multi-agent system for doing that using Google's ADK,
+
+32
+00:02:15,640 --> 00:02:20,080
+or Agent Development Kit. After you learn the basic syntax with ADK,
+
+33
+00:02:20,420 --> 00:02:25,440
+you'll design your system one agent at a time. The first agent will converse with you
+
+34
+00:02:25,440 --> 00:02:27,920
+to extract the goal and type of graph you want to build.
+
+35
+00:02:27,920 --> 00:02:33,220
+Then given that goal, a group of agents will specialize in extracting the entities
+
+36
+00:02:33,220 --> 00:02:35,560
+and relationships from your structured data,
+
+37
+00:02:36,080 --> 00:02:38,980
+and another group of agents will handle your unstructured data.
+
+38
+00:02:39,600 --> 00:02:42,700
+Finally, the final set of agents will connect the two models
+
+39
+00:02:42,700 --> 00:02:44,380
+and construct the graph accordingly.
+
+40
+00:02:44,960 --> 00:02:47,320
+Many people have worked to create this course.
+
+41
+00:02:47,540 --> 00:02:52,240
+I'd like to thank Premier4J, Martin O'Hanlon, and Adam Cowley.
+
+42
+00:02:52,580 --> 00:02:56,300
+From deeplearning.ai, Christopher Policastro and Hara Salami
+
+43
+00:02:56,300 --> 00:02:59,120
+also contributed to this course. In the first lesson,
+
+44
+00:02:59,240 --> 00:03:02,560
+you'll learn more about the underlying structure of knowledge drafts
+
+45
+00:03:02,560 --> 00:03:07,020
+and how you can build one and use it to identify root causes of product issues.
+
+46
+00:03:07,020 --> 00:03:09,720
+Sounds great. Let's get started.
+
+47
+00:03:10,040 --> 00:03:10,080
+Let's get started.
+
+48
+00:03:10,080 --> 00:03:10,720
+Let's dat!
+
