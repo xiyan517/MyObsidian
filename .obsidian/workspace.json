@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "8 感悟/炒股反思.md",
+                "file": "3 学习笔记/11_Agent/02_Agentic.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "炒股反思"
+              "title": "02_Agentic"
             }
           }
         ]
@@ -188,10 +188,14 @@
   },
   "active": "b52d7eadf4d60b96",
   "lastOpenFiles": [
+    "临时文件/_patch_notes_p34.py",
+    "3 学习笔记/11_Agent/kg-multi-agent-arch.png",
+    "临时文件/P034-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p34 2-多智能体系统的架构 [BV1AJen6SEVQ_p34].zh.srt",
+    "临时文件/a59a77a0-3414-4d41-97a4-dd68de596efc.png",
+    "8 感悟/炒股反思.md",
     "3 学习笔记/11_Agent/02_Agentic.md",
     "临时文件/_patch_notes_p18.py",
     "临时文件/P018-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p18 5-MCP [BV1AJen6SEVQ_p18].zh.srt",
-    "8 感悟/炒股反思.md",
     "临时文件/_patch_notes_p16_p17.py",
     "临时文件/P016-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p16 3-工具语法 [BV1AJen6SEVQ_p16].zh.srt",
     "临时文件/P017-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p17 4-代码执行 [BV1AJen6SEVQ_p17].zh.srt",
@@ -199,7 +203,6 @@
     "临时文件/P015-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p15 2-创建工具 [BV1AJen6SEVQ_p15].zh.srt",
     "临时文件/_patch_notes_p14.py",
     "临时文件/P014-【吴恩达】2026年公认最好的【Agent智能体】教程！大模型入门到进阶，一套全解决！Agentic AI—附带课件代码 p14 【模块3：工具使用】1-什么是工具？ [BV1AJen6SEVQ_p14].zh.srt",
-    "临时文件/_patch_notes_p13.py",
     "3 学习笔记/11_Agent/03_任务分解.md",
     "3 学习笔记/11_Agent/01_Deepseek Harness.md",
     "0 草稿箱/链接.md",
@@ -231,8 +234,6 @@
     "未命名.canvas",
     "3 学习笔记/01_RAG/assets/13-sql-cell2-0.png",
     "3 学习笔记/01_RAG/assets/11-tool-cell2-0.png",
-    "3 学习笔记/01_RAG/assets/10-rag-cell4-1.png",
-    "3 学习笔记/01_RAG/assets/10-rag-cell3-0.png",
-    "3 学习笔记/01_RAG/assets/09-vector-cell3-0.png"
+    "3 学习笔记/01_RAG/assets/10-rag-cell4-1.png"
   ]
 }

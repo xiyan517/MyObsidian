@@ -1,0 +1,508 @@
+1
+00:00:00,000 --> 00:00:03,560
+Now that you have an idea about the goal of the knowledge graph you'll build,
+
+2
+00:00:03,780 --> 00:00:10,620
+let's go through the details of the multi-agent system you'll design to first find the graph model and then construct the graph.
+
+3
+00:00:11,140 --> 00:00:14,040
+There are lots of definitions for an agent. Here's my definition.
+
+4
+00:00:14,300 --> 00:00:19,680
+I like to think about agents from an engineering perspective, and for me it's a fancy new kind of control flow operator.
+
+5
+00:00:20,200 --> 00:00:26,680
+Basically you have a loop, and inside of the loop there's a call to an LLM that then figures out what it wants to do,
+
+6
+00:00:26,680 --> 00:00:32,660
+and then based on what it wants to do, passes that back over to the computer side, to the client side,
+
+7
+00:00:32,860 --> 00:00:36,920
+and really runs into a switch statement that performs potential actions.
+
+8
+00:00:37,480 --> 00:00:42,780
+So in this loop this is really just intelligent behavior that's happening because of the LLM call,
+
+9
+00:00:43,000 --> 00:00:46,380
+but the execution of that intelligent behavior is still happening through code.
+
+10
+00:00:47,100 --> 00:00:51,520
+What's great about this architecture, of course, is that agents are really powerful because you've got an LLM there
+
+11
+00:00:51,520 --> 00:00:55,540
+to do some reasoning and call out to tools that can do anything you can do with code,
+
+12
+00:00:55,540 --> 00:01:01,380
+and it's adaptive because the LLM is given memory, so it can learn what's happened either through the conversation
+
+13
+00:01:01,380 --> 00:01:06,440
+or through things that you've saved into memory that are important for it to decide future outcomes.
+
+14
+00:01:06,860 --> 00:01:10,660
+And it's pretty easy to get started because you're really just doing natural language descriptions
+
+15
+00:01:10,660 --> 00:01:12,980
+through the prompts about what the agent should do.
+
+16
+00:01:13,660 --> 00:01:16,520
+But all this power and ease comes with some downsides.
+
+17
+00:01:17,100 --> 00:01:22,100
+It can be slow working with an agent because the calls out to a remote LLM is a bit expensive and slow.
+
+18
+00:01:22,100 --> 00:01:26,340
+It's also non-deterministic, well, because LLMs are non-deterministic.
+
+19
+00:01:27,180 --> 00:01:30,480
+And, you know, token cost over time can really add up quite a lot.
+
+20
+00:01:30,680 --> 00:01:35,400
+So if you're running an agent over time in production for thousands and thousands of calls,
+
+21
+00:01:35,920 --> 00:01:38,320
+the token cost gets really expensive really quickly.
+
+22
+00:01:38,880 --> 00:01:44,740
+That's one of the advantages of moving to a multi-agent system is that you can actually prove some of the downsides here.
+
+23
+00:01:45,220 --> 00:01:47,520
+So what is exactly a multi-agent system?
+
+24
+00:01:47,740 --> 00:01:52,000
+It is, of course, just a system where you have multiple agents working collaboratively on a single goal.
+
+25
+00:01:52,400 --> 00:01:58,060
+The agents typically are arranged into a kind of a hierarchy where you have a top-level agent that manages the overall flow,
+
+26
+00:01:58,180 --> 00:02:05,320
+and then as many sub-level agents as you'd like to that have either different phases of the work or very specific tasks that they're performing.
+
+27
+00:02:05,940 --> 00:02:08,220
+The agents interact in a couple different ways.
+
+28
+00:02:08,780 --> 00:02:15,580
+There's a main conversational thread that's basically happening with the user where the user might have some message that they kick off the work with.
+
+29
+00:02:16,020 --> 00:02:21,220
+Then each of the agents can decide, is this work that I can do or something that somebody else should do?
+
+30
+00:02:21,360 --> 00:02:23,460
+So can I delegate this to a different agent?
+
+31
+00:02:23,880 --> 00:02:28,840
+So you can see in this illustration here that the root agent is able to delegate to either agent A or agent B.
+
+32
+00:02:29,480 --> 00:02:33,640
+Internally, agent A and agent B can do some work using the tools that they've been given.
+
+33
+00:02:34,240 --> 00:02:41,420
+One of the tools in agent B is unique. This P agent here, this P function, is actually going to be an agent itself,
+
+34
+00:02:41,600 --> 00:02:43,320
+but being called as if it were a tool.
+
+35
+00:02:43,700 --> 00:02:45,520
+So there's two ways for tools to interact.
+
+36
+00:02:45,700 --> 00:02:51,320
+Either agents delegating to each other, or an agent that's behaving as a tool being called by another agent.
+
+37
+00:02:51,860 --> 00:02:56,860
+And along the way, you've got specific checkpoints with the user that are possible whenever you have any of these transitions.
+
+38
+00:02:57,900 --> 00:03:00,120
+So what is the multi-agent system that you'll build?
+
+39
+00:03:00,120 --> 00:03:06,520
+You'll build parts of a knowledge graph agent, focusing on the sub-agents that perform knowledge graph construction.
+
+40
+00:03:07,180 --> 00:03:10,340
+You'll learn the basics of building an agent using Google's ADK.
+
+41
+00:03:10,720 --> 00:03:14,420
+You'll learn what memory is and how to use it for recording critical information.
+
+42
+00:03:14,760 --> 00:03:16,000
+You'll define some tools.
+
+43
+00:03:16,180 --> 00:03:20,780
+And of course, all of this will converge from open-ended conversation to executable code.
+
+44
+00:03:21,220 --> 00:03:26,340
+This beautiful diagram are all the agents and the flow of agents and their interactions.
+
+45
+00:03:26,340 --> 00:03:28,760
+Let's walk through this a little bit at a time.
+
+46
+00:03:29,220 --> 00:03:35,680
+At the top level, this is the agent that manages the overall introduction of the user to what's possible,
+
+47
+00:03:35,980 --> 00:03:42,100
+what the agent's responsibility is, and helping the user understand what's the workflow that's possible here,
+
+48
+00:03:42,320 --> 00:03:45,600
+from knowledge graph construction all the way to doing graph retrieval.
+
+49
+00:03:45,920 --> 00:03:49,420
+So this is really a conversational agent that itself is not going to do any work,
+
+50
+00:03:49,420 --> 00:03:53,200
+but it's going to guide the user through the different phases of work that are going to occur.
+
+51
+00:03:53,840 --> 00:03:58,260
+It's this next level of agents down that are really going to manage the individual workflows.
+
+52
+00:03:58,820 --> 00:04:00,360
+And there are three major workflows.
+
+53
+00:04:00,680 --> 00:04:06,060
+Really, on the left, we've got two workflows, the structured data agent and the unstructured data agent.
+
+54
+00:04:06,440 --> 00:04:11,120
+These are responsible for taking the user through the idea of what they might want to do,
+
+55
+00:04:11,220 --> 00:04:12,940
+all the way to constructing a graph.
+
+56
+00:04:12,940 --> 00:04:18,000
+And then, if those have done their job, this third agent, the graph rag agent on the right side,
+
+57
+00:04:18,160 --> 00:04:22,160
+is responsible for helping the user actually answer questions using that graph.
+
+58
+00:04:22,480 --> 00:04:26,780
+Both the structured data agent and the unstructured data agent are workflow agents.
+
+59
+00:04:26,980 --> 00:04:32,260
+They perform their work by interacting with the user and helping them go through the steps of what needs to happen,
+
+60
+00:04:32,300 --> 00:04:35,620
+from the idea of what they want to do, all the way to describing the graph.
+
+61
+00:04:36,040 --> 00:04:40,080
+And they do that by delegating to sub-agents that specialize in each phase of the workflow.
+
+62
+00:04:40,560 --> 00:04:46,440
+You'll see some replication here that both the structured and unstructured data have some agents that are in common,
+
+63
+00:04:46,620 --> 00:04:48,860
+and I'll touch on those as we get into the one level down.
+
+64
+00:04:49,740 --> 00:04:53,640
+Okay, so here's the sub-agents that are actually doing the workflow for structured data.
+
+65
+00:04:54,060 --> 00:04:55,920
+Let's walk through these one at a time.
+
+66
+00:04:56,120 --> 00:05:00,900
+And also, what's important to note here is the output of actually these agents doing their work.
+
+67
+00:05:01,060 --> 00:05:06,280
+If you think about yourself as being a data engineer that's been given the task of actually performing this work,
+
+68
+00:05:06,780 --> 00:05:10,800
+each of these agents are kind of what you would do yourself if you're engaging in the work.
+
+69
+00:05:11,420 --> 00:05:17,340
+This first one, the user intent agent, is what you would do when you've been asked to do some task for data analysis,
+
+70
+00:05:17,880 --> 00:05:21,140
+and whoever asked that, you respond to with some questions.
+
+71
+00:05:21,360 --> 00:05:23,320
+Hey, could you clarify what you want me to do?
+
+72
+00:05:23,940 --> 00:05:26,020
+Give me, you know, what are the goals you're after?
+
+73
+00:05:26,200 --> 00:05:27,860
+What kind of analysis do you want me to perform?
+
+74
+00:05:28,380 --> 00:05:30,380
+And it's really important to nail that down up front.
+
+75
+00:05:30,380 --> 00:05:34,700
+this is the kind of the requirements or the direction overall of what the job is.
+
+76
+00:05:34,960 --> 00:05:39,440
+So this user intent agent, even though it's collaborative and kind of conversational,
+
+77
+00:05:39,880 --> 00:05:41,420
+the output of this is really important.
+
+78
+00:05:41,640 --> 00:05:45,160
+We're capturing what is the user goal and what are they trying to get out of this work.
+
+79
+00:05:45,600 --> 00:05:49,680
+Based on that user goal then, this next agent down, the file suggestion agent,
+
+80
+00:05:50,040 --> 00:05:54,220
+it's going to take into account what has been established through the user intent agent
+
+81
+00:05:54,220 --> 00:05:57,280
+as the direction and the goal of what the work is.
+
+82
+00:05:57,280 --> 00:06:01,440
+And then it's going to look at the data files that are available and try to find from those data files
+
+83
+00:06:01,440 --> 00:06:04,140
+which ones are useful for actually achieving that goal.
+
+84
+00:06:04,440 --> 00:06:05,940
+There might be more files that are available.
+
+85
+00:06:06,080 --> 00:06:08,580
+There might be even multiple data sources that are available.
+
+86
+00:06:08,880 --> 00:06:13,280
+Here we're simplifying it down to just making suggestions for files that are available on disk.
+
+87
+00:06:13,580 --> 00:06:18,160
+The output of that ends up being a list of suggested files that have been approved by the user.
+
+88
+00:06:18,580 --> 00:06:23,300
+And then that gets input into the next agent, which is the schema proposal agent.
+
+89
+00:06:23,740 --> 00:06:26,240
+The schema proposal agent is actually a pair of agents
+
+90
+00:06:26,240 --> 00:06:32,660
+formed in a critic pattern, where one of the agents is responsible for making a proposal about what this schema could look like.
+
+91
+00:06:32,820 --> 00:06:38,280
+And the next one is going to be a critic saying, well, maybe that's not quite so right to think about changing in this way or that way.
+
+92
+00:06:38,540 --> 00:06:46,820
+We'll look at the details in a later lesson, but the idea here is that this pairing of agents internally will loop through what's possible,
+
+93
+00:06:47,040 --> 00:06:50,380
+self-criticize itself, and the outcome of that should be a good graph schema
+
+94
+00:06:50,380 --> 00:06:53,740
+that uses the files that were approved from the previous agent,
+
+95
+00:06:56,300 --> 00:06:56,700
+Three.
+
+96
+00:07:16,120 --> 00:07:18,840
+Here, in the middle, we're dealing with unstructured data,
+
+97
+00:07:18,840 --> 00:07:25,440
+But it still begins with understanding what is the user intent for bringing in the unstructured data, and here that's markdown files.
+
+98
+00:07:25,780 --> 00:07:32,660
+And then, okay, if you understand why the user wants to bring in some markdown files, you can identify which files are relevant.
+
+99
+00:07:32,860 --> 00:07:39,120
+Again, a file suggestion agent would do that. Similar behavior to the structured data, but this third step is different.
+
+100
+00:07:39,680 --> 00:07:46,140
+In the third step, rather than designing a schema based on some CSV files, all you have is text.
+
+101
+00:07:46,140 --> 00:07:55,040
+And from that text, how do you create a graph? Well, the approach here is that we're going to have two specialized agents that look through the text and identify what are called entities.
+
+102
+00:07:55,360 --> 00:08:04,900
+So people, places, and things that occur within the text. And also for those entities, it identifies what facts are describing those entities within the text.
+
+103
+00:08:05,480 --> 00:08:10,880
+So let's say that it was, you know, I was in the text and I had some reviews of local coffee shops.
+
+104
+00:08:10,880 --> 00:08:17,380
+It might reveal that, you know, ABK really loves to soar a coffee from fills. Because who doesn't?
+
+105
+00:08:17,640 --> 00:08:20,060
+So those are facts that could be extracted from the text.
+
+106
+00:08:20,340 --> 00:08:24,280
+The goal of this agent is actually to find out what kinds of facts can be extracted.
+
+107
+00:08:24,540 --> 00:08:28,060
+And not do the extraction, but simply describe what's possible.
+
+108
+00:08:28,300 --> 00:08:31,460
+And so that we're going to be calling a knowledge extraction plan.
+
+109
+00:08:31,460 --> 00:08:41,300
+The knowledge extraction plan paired with the graph construction plan from the structure data together give all the rules that we need using the graph construction plan and the graph extraction plan.
+
+110
+00:08:41,540 --> 00:08:46,120
+This red box down in the corner then is just a single tool that has multiple tools internally,
+
+111
+00:08:46,440 --> 00:08:51,160
+but actually can take those plans and do the extraction itself and do the construction itself.
+
+112
+00:08:51,160 --> 00:08:56,320
+You'll loop over all the construction rules to create a domain graph, loop over all the
+
+113
+00:08:56,320 --> 00:09:01,520
+markdown files, chunk them up, do the vector embedding of those, and then also extract entities
+
+114
+00:09:01,520 --> 00:09:05,340
+and the facts, and then connect those to the structured data.
+
+115
+00:09:05,840 --> 00:09:10,520
+In Lessons 4 through 8, you'll go through the entire workflow for structured data, from
+
+116
+00:09:10,520 --> 00:09:13,860
+user intent, file suggestions, to the schema proposal.
+
+117
+00:09:14,740 --> 00:09:20,400
+Then we'll skip over to the unstructured data, just the entity and fact type proposal, and
+
+118
+00:09:20,400 --> 00:09:24,280
+and then finally we'll look at the particular tool in Lesson 8 that does the graph construction
+
+119
+00:09:24,280 --> 00:09:29,180
+itself, does all the hard work that the previous agents really did the reasoning about what the
+
+120
+00:09:29,180 --> 00:09:29,820
+work should be.
+
+121
+00:09:30,360 --> 00:09:34,300
+In the next lesson, we'll actually get into doing some coding, building your first agent,
+
+122
+00:09:34,360 --> 00:09:35,980
+we're going to be using Google's ADK.
+
+123
+00:09:36,580 --> 00:09:40,420
+If you're already familiar with Google's ADK, you could skip over that lesson and move on
+
+124
+00:09:40,420 --> 00:09:44,720
+to actually building the multi-agent system, but I think it's a really good overview and
+
+125
+00:09:44,720 --> 00:09:49,060
+also it helps you understand how I think about it, and how I've implemented it in this particular
+
+126
+00:09:49,060 --> 00:09:51,720
+multi-agent system, so it's nice to walk through.
+
+127
+00:09:52,020 --> 00:09:52,860
+I'll see you there.
+
