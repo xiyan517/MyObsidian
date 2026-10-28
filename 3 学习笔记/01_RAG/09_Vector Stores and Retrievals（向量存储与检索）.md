@@ -75,13 +75,13 @@ Question → Embedding → Similarity Search → Top-K chunks
 
 ## 2. FAISS vs Chroma 与环境
 
-| | FAISS | Chroma |
-| --- | --- | --- |
-| 来源 | Facebook AI Similarity Search | Chroma |
-| 安装 | `pip install faiss-cpu` | `langchain-chroma` 等 |
-| Windows | 课程首选，坑较少 | 常撞编译器 / VS |
-| 建库 | 常先建 `faiss.Index*` 再包进 `FAISS(...)` | 一般不用手写 index |
-| 入库 / 检索 | `add_documents`、similarity search | 流程基本相同 |
+|         | FAISS                               | Chroma               |
+| ------- | ----------------------------------- | -------------------- |
+| 来源      | Facebook AI Similarity Search       | Chroma               |
+| 安装      | `pip install faiss-cpu`             | `langchain-chroma` 等 |
+| Windows | 课程首选，坑较少                            | 常撞编译器 / VS           |
+| 建库      | 常先建 `faiss.Index*` 再包进 `FAISS(...)` | 一般不用手写 index         |
+| 入库 / 检索 | `add_documents`、similarity search   | 流程基本相同               |
 
 ```bash
 pip install faiss-cpu
