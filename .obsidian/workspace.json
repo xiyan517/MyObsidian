@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3 学习笔记/60_UE/UE5入门.md",
+                "file": "3 学习笔记/60_UE/UE5基础课程.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "UE5入门"
+              "title": "UE5基础课程"
             }
           }
         ]
@@ -188,6 +188,9 @@
   },
   "active": "bd5c854ca4e37544",
   "lastOpenFiles": [
+    "临时文件/4 - UE5 navigation hotkeys and fundamentals--[koudaizy.com].zh.srt",
+    "3 学习笔记/60_UE/UE5入门.md",
+    "3 学习笔记/60_UE/UE5基础课程.md",
     "7 常用命令/Python.md",
     "7 常用命令/Conda.md",
     "8 感悟/炒股反思.md",
@@ -218,7 +221,6 @@
     "3 学习笔记/01_RAG/16_LangGraph.md",
     "3 学习笔记/01_RAG/14_LinkedIn Profile Scraping（网页数据爬取分析）.md",
     "3 学习笔记/01_RAG/15_Resume Parsing with LLM（文本抽取-JSON）.md",
-    "3 学习笔记/60_UE/UE5入门.md",
     "3 学习笔记/04_AIGC/01_Stable Diffusion.md",
     "3 学习笔记/99_其他/01_obsidian入门.md",
     "3 学习笔记/04_AIGC/02_文生图参数与快速出图.md",
@@ -226,8 +228,6 @@
     "3 学习笔记/04_AIGC/assets/03-sampler-recommend.png",
     "3 学习笔记/04_AIGC/02_采样方法.md",
     "3 学习笔记/03_MCP/17_BlenderMCP.md",
-    "3 学习笔记/50_Bleader/01_基础知识.md",
-    "公司/沃德科/杂.md",
     "3 学习笔记/01_RAG/assets/16-langgraph-overview.png",
     "3 学习笔记/01_RAG/assets/828c974b-b4cb-413e-8aaf-18249cfe50ee.png",
     "3 学习笔记/01_RAG/assets/16-langgraph-graph.png",
