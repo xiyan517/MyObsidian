@@ -7,7 +7,7 @@ aliases:
   - 见缝插针
 created: 2026-11-17
 updated: 2026-11-17
-source: Cocos Creator 3.8 官方手册（项目结构）+ 《见缝插针》教程字幕（P04–P08，已校正 ASR）
+source: Cocos Creator 3.8 官方手册（项目结构 / 2D 物理）+ 《见缝插针》教程字幕（P04–P11、P13–P15，已校正 ASR；P12 字幕暂缺）
 tags:
   - type/literature-note
   - topic/cocos
@@ -18,7 +18,7 @@ tags:
 # Cocos Creator 入门
 
 > [!summary]
-> 先认工程长什么样：你只在 `assets/` 里创作，其余多为编辑器/构建产物。资源靠同名 `.meta` 的 UUID 被引用，改名或移动请在编辑器里做。实战以 **见缝插针**（Creator 3.8 + TS）串起来：改 Camera 背景 → 摆圆 → `angle` 旋转 → Pin Prefab → 三定位点 → **GameManager.pinSpawn** → 再写针的移动与点击插入。本文以 **Cocos Creator 3.x（文档参考 3.8）** 为准。
+> 先认工程长什么样：你只在 `assets/` 里创作，其余多为编辑器/构建产物。资源靠同名 `.meta` 的 UUID 被引用，改名或移动请在编辑器里做。实战以 **见缝插针**（Creator 3.8 + TS）串起来：改 Camera 背景 → 摆圆 → `angle` 旋转 → Pin Prefab → 三定位点 → 生成/tween/插入/跟转 → 分数 → **针头 Collider2D + RigidBody2D 碰撞** → **`gameOver`**。本文以 **Cocos Creator 3.x（文档参考 3.8）** 为准。
 
 ## 本章目录
 
@@ -30,7 +30,13 @@ tags:
 | §4 针的 Prefab | 空节点 + 针身/针头子节点、缩放旋转配色、拖成预制体 | P06 |
 | §5 针的三个定位点 | 生命周期、Position1/2/3、到位判定 vs 碰撞、挂到 Circle 跟随旋转 | P07 |
 | §6 针的生成 | `GameManager`、`instantiate`、挂到管理器下、对齐 `p1` | P08 |
-| （后续） | 针自身移动到 p2、点击插向 p3、胜负判定… | — |
+| §7 tween 控制针运动 | `Pin.moveTo`、`tween().to().start()`、生成后移到 `p2` | P09 |
+| §8 控制针的插入 | `input` 触摸、`currentPin`、点击移到 `p3` 再刷新针 | P10 |
+| §9 针跟随圆旋转 | tween `.call`、可选 `parentNode`、保世界坐标/旋转再换父 | P11 |
+| §10 分数与 UI | `Label`、`score++`、`updateScore`、单例供 Pin 到位回调 | P13 |
+| §11 针头碰撞检测 | `CircleCollider2D`、**`RigidBody2D`**、`BEGIN_CONTACT` | P14 |
+| §12 游戏结束逻辑 | `isGameOver`、停转、禁止再发射；结束动画下节 | P15 |
+| （后续） | 游戏结束动画（放大、改背景色）… | — |
 
 ---
 
@@ -441,18 +447,43 @@ Pin                 ← 空节点（之后做成 Prefab 的根）
 ## 6. 针的生成（见缝插针 · P08）
 
 > [!summary]
-> 用空节点挂 **`GameManager`**：引用 `p1/p2/p3` + `pinPrefab`。`pinSpawn` 里 `instantiate` → `addChild` 到管理器下 → 位置对齐一号位。开局在 `start` 生成一根；**移动交给针自己**（下节）。
+> 定位点调完后，临时预览针可销毁或禁用。正式流程用 **`GameManager`** 管生成（以及以后的胜负）：`pinSpawn` = `instantiate(pinPrefab)` → `addChild` 到管理器下 → 对齐 `p1`。开局 `start` 刷一根；**运动交给针自己**（P09）。
 
-### 6.1 场景准备
+### 6.1 承接上一节
+
+| 事项 | 做法 |
+| --- | --- |
+| Position 下的预览 Pin | **销毁**或**先禁用**；微调位置时再启用即可 |
+| 正式的针 | 一律由代码 `instantiate`，不再手摆 |
+| 本节范围 | 只做 **生成**；生成后移到 p2、点击插向 p3 放到下节 |
+
+### 6.2 为什么要有 GameManager
+
+课上把「生成针 + 失败/胜利判定」收拢到一个管理脚本，避免逻辑散落在各个 Pin 上。
 
 | 步骤 | 操作 |
 | --- | --- |
-| 1 | `scripts` 下新建脚本 `GameManager.ts` |
-| 2 | 场景建空节点，也叫 `GameManager`，挂上该脚本 |
-| 3 | 职责预留：生成针、以后还有失败/胜利判定 |
+| 1 | 在 `scripts` 下新建脚本 `GameManager.ts` |
+| 2 | 场景建 **空节点**，也叫 `GameManager`，把脚本挂上去 |
+| 3 | 管理器本地位置建议放在 **(0, 0)**（与课上一致，后面本地坐标才省事） |
 | 4 | 检查器赋值：`p1`/`p2`/`p3` ← 三个 Position；`pinPrefab` ← Prefab 资源 |
 
-### 6.2 脚本：`GameManager.ts`
+> [!note] ASR 校正
+> 字幕里的 *pinspoon* → **`pinSpawn`**；*instinstate* → **`instantiate`**；*list node.add children* → **`this.node.addChild`**；*负值* → **赋值**。
+
+### 6.3 生成流水线
+
+```text
+start()
+  └─ pinSpawn()
+        ├─ instantiate(pinPrefab)     → 得到 const pin
+        ├─ this.node.addChild(pin)    → 挂到 GameManager 下（方便在层级里找）
+        └─ pin.setPosition(p1.position) → 初始落在一号位（屏外）
+```
+
+本节生成只用 `p1`；`p2`/`p3` 先挂上引用，留给移动与插入。
+
+### 6.4 脚本：`GameManager.ts`
 
 ```ts
 import { _decorator, Component, Node, Prefab, instantiate } from 'cc';
@@ -483,7 +514,7 @@ export class GameManager extends Component {
         const pin = instantiate(this.pinPrefab);
         this.node.addChild(pin);
 
-        // 课上：用本地坐标；要求 GameManager 与 Position 同父，且管理器本地坐标约为 (0,0)
+        // 课上：本地坐标。前提见下方 warning
         pin.setPosition(this.p1.position);
 
         // 更稳妥（父节点坐标不一致时）：
@@ -494,27 +525,635 @@ export class GameManager extends Component {
 
 | API / 字段 | 作用 |
 | --- | --- |
-| `@property(Node) p1/p2/p3` | 三个定位点；本节生成只用 `p1`，`p2`/`p3` 留给移动与插入 |
-| `@property(Prefab) pinPrefab` | 要实例化的针预制体 |
+| `@property(Node) p1/p2/p3` | 三个定位点；本节生成只用 `p1` |
+| `@property(Prefab) pinPrefab` | 要实例化的针预制体（默认 `null`，检查器拖入） |
 | `instantiate(prefab)` | 克隆出节点树实例 |
-| `this.node.addChild(pin)` | 先挂在 `GameManager` 下，方便在层级里找到 |
+| `this.node.addChild(pin)` | 先挂在 `GameManager` 下 |
 | `pin.setPosition(this.p1.position)` | 初始落在一号位（课上写法） |
 | `start()` | 游戏开始先刷一根针 |
 
-### 6.3 运行时怎么确认生成成功
+### 6.5 本地坐标 vs 世界坐标
 
-1. 检查器里四个引用都已拖好（未赋值会什么都没有）。
-2. 运行后预览里可能 **看不见**（针还在屏外一号位）。
-3. 打开 **层级管理器**：`GameManager` 下应出现新的 `Pin`；或点 **暂停**，在场景/预览底区能看到屏外那根针。
+课上先试本地：`pin.setPosition(this.p1.position)`。
+
+| 情况 | 说明 |
+| --- | --- |
+| 为何课上本地能用 | `GameManager` 本地约在 **(0,0)**，与 Position 同挂在 Canvas 下，两边「本地坐标」对齐 |
+| Canvas 自身 | 设计分辨率下 Canvas 世界位置常是中心（课上提到约 `360, 640`），不等于管理器本地原点 |
+| 更稳妥写法 | `pin.setWorldPosition(this.p1.worldPosition)`——父节点挪了也不容易错位 |
 
 > [!warning] 本地坐标前提
-> `setPosition(p1.position)` 只有在「Pin 的父节点」与「p1 的父节点」坐标系对齐时才等价（课上：`GameManager` 本地约在原点，和 Position 同挂在 Canvas 下）。若管理器不在原点，改用 `setWorldPosition(this.p1.worldPosition)`。
+> `setPosition(p1.position)` 只有在「Pin 的父节点」与「p1 的父节点」坐标系对齐时才等价。若把 `GameManager` 挪离原点，或 Position 换了父节点，请改用世界坐标。
 
-### 6.4 和下一节的分工
+### 6.6 运行时怎么确认生成成功
+
+1. 先给检查器四个引用赋值（未拖会生成失败或什么都没有）。
+2. 运行后预览里可能 **看不见**——针还在 **屏外一号位**，属正常。
+3. 打开 **层级管理器**：`GameManager` 下应出现新的 `Pin`。
+4. 或点 **暂停**，在场景/预览底区能看到屏外那根针。
+
+### 6.7 和下一节的分工
 
 | 谁 | 管什么 |
 | --- | --- |
-| `GameManager` | `pinSpawn` 生成；以后胜负 |
-| **针自身脚本**（下节） | 生成后自己运动到 **p2**，再响应点击冲向 **p3** |
+| `GameManager` | `pinSpawn` 生成；以后胜负判定 |
+| **针自身脚本**（P09） | 提供 `moveTo`；生成后由管理器调用，移到 **p2** |
+| **点击插入**（P10） | 管理器监听触摸，让 `currentPin` 冲向 **p3**，再刷下一根 |
+
+课上原话：生成完要控制它运动到二号位——**运动能力写在针上**，管理器负责「何时、移向哪」。
+
+---
+
+## 7. tween 控制针的运动（见缝插针 · P09）
+
+> [!summary]
+> 在 Prefab 上挂 **`Pin.ts`**，对外只暴露 `moveTo(目标, 秒数)`。内部用系统 **`tween(this.node).to(...).start()`** 做位置插值。`GameManager.pinSpawn` 生成后取出 `Pin` 组件，移到 **p2**；时长用 `@property moveDuration`（课上约 0.5s）。
+
+### 7.1 挂脚本到 Prefab
+
+1. 新建 `Pin.ts`，挂到针 Prefab 根节点（双击 Prefab 编辑，或改场景实例后 **Apply**）。
+2. 职责：给针提供「移到指定位置」的能力，供外界调用——不在 `Pin.start` 里写死终点。
+
+### 7.2 `moveTo` + tween
+
+位置动画和颜色渐变同一套路：某个属性从当前值变到目标值。
+
+```ts
+import { _decorator, Component, Vec3, tween } from 'cc';
+const { ccclass } = _decorator;
+
+@ccclass('Pin')
+export class Pin extends Component {
+    /** 在 duration 秒内移动到 targetPosition（本地坐标） */
+    moveTo(targetPosition: Vec3, duration: number) {
+        tween(this.node)
+            .to(duration, { position: targetPosition }, { easing: 'smooth' })
+            .start();
+    }
+}
+```
+
+| 片段 | 含义 |
+| --- | --- |
+| `tween(this.node)` | 对 **节点** 做动画（位置在 `node` 上） |
+| `.to(duration, { position }, { easing })` | 持续 `duration` 秒，把 `position` 插到目标；`easing: 'smooth'` 曲线平滑 |
+| `.start()` | 真正开始播 |
+| 链式写法 | `tween(...).to(...).start()`，课上称「链式编程」 |
+
+> [!tip]
+> 也可用每帧自己算位移（飞机大战那套）；本节用 tween 省事。先会用，曲线细节可后查。
+
+### 7.3 生成后移到二号位
+
+`GameManager` 增加可调时长，生成后调用 `moveTo`：
+
+```ts
+@property
+moveDuration = 0.5; // 秒；不是速度
+
+pinSpawn() {
+    if (!this.pinPrefab || !this.p1 || !this.p2) return;
+
+    const pinNode = instantiate(this.pinPrefab);
+    this.node.addChild(pinNode);
+    pinNode.setPosition(this.p1.position);
+
+    const pin = pinNode.getComponent(Pin);
+    if (pin) {
+        pin.moveTo(this.p2.position, this.moveDuration);
+    }
+}
+```
+
+| 注意 | 说明 |
+| --- | --- |
+| 变量名 | 节点叫 `pinNode`，组件叫 `pin`，避免和 Prefab 字段糊在一起 |
+| `moveDuration` | 单位是 **秒**（课上曾误起名 `moveSpeed`，随即改掉） |
+| 属性要用 `this.` | `this.p2`、`this.moveDuration` |
+| 调试 | 可先在 `Pin.start` 里 `moveTo(new Vec3(0,0,0), 3)` 验证 tween，确认后删掉，改由管理器驱动 |
+
+运行效果：每刷一根针，约 0.5s 从屏外滑到待命点；间距不满意就调 Position2，不必改代码。
+
+---
+
+## 8. 控制针的插入（见缝插针 · P10）
+
+> [!summary]
+> 针就位后，用 **`input` 监听 `TOUCH_START`**（含鼠标按下）。`GameManager` 记住 **`currentPin`**；点击时 `moveTo(p3)`，再立刻 `pinSpawn()` 补下一根待命针。插入时长可把 `moveDuration` 调到约 **0.2s**。插上后跟圆转 → 下节。
+
+### 8.1 流程
+
+```text
+pinSpawn → 落在 p1 → moveTo(p2) 就位
+                ↓
+         玩家 TOUCH_START
+                ↓
+    currentPin.moveTo(p3)  ← 往上插
+                ↓
+         再 pinSpawn()     ← 屏幕下方补新针
+```
+
+### 8.2 注册 / 注销触摸
+
+事件一般在 **`onLoad`** 注册、**`onDestroy`** 注销（成对出现，少留隐患）。
+
+```ts
+import { input, Input } from 'cc';
+
+onLoad() {
+    input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+}
+
+onDestroy() {
+    input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+}
+```
+
+| 点 | 说明 |
+| --- | --- |
+| `Input.EventType.TOUCH_START` | 触摸开始；桌面预览里对应鼠标按下 |
+| 第 2 参 | 回调：`this.onTouchStart` |
+| 第 3 参 | `this`，保证回调里 `this` 仍是组件 |
+| 不写 `off` | 多数情况也能跑；课上仍建议注册/注销成对 |
+
+> [!note] ASR 校正
+> *unload* → **`onLoad`**；*on Detroit* → **`onDestroy`**；*ontouch start* → **`TOUCH_START` / `onTouchStart`**；*pin.spot* → **`pinSpawn`**；*cancel.error* → **`console.error`**。
+
+### 8.3 记住当前针：`currentPin`
+
+点击时要动的是「上一根已生成、正在待命」的那根，所以生成时存引用：
+
+```ts
+private currentPin: Pin | null = null;
+```
+
+- 类型用 **`Pin`**（组件）更方便直接 `moveTo`；用 `Node` 也行，调用前再 `getComponent`。
+- **不要** `@property`：运行时赋值，不是检查器拖拽。
+
+在 `pinSpawn` 里：
+
+```ts
+const pin = pinNode.getComponent(Pin);
+if (!pin) {
+    console.error('实例化的针身上没有 Pin 组件，请检查 Prefab');
+    return;
+}
+this.currentPin = pin;
+pin.moveTo(this.p2!.position, this.moveDuration);
+```
+
+| 点 | 说明 |
+| --- | --- |
+| 缺组件就 `console.error` | Prefab 上组件被误删时，控制台 **红字** 醒目（相对 `console.log`） |
+| 课上说法 | 类似「护城河」：生产里要写合理的防护；这里必要性中等，但值得留 |
+
+### 8.4 点击：插入 + 刷下一根
+
+```ts
+onTouchStart() {
+    if (!this.currentPin || !this.p3) return;
+
+    this.currentPin.moveTo(this.p3.position, this.moveDuration);
+    this.pinSpawn(); // 立刻补一根新的到 p1→p2
+}
+```
+
+课上手感：默认 0.5s 偏慢，把检查器里 **`moveDuration` 调到约 0.2** 更干脆。
+
+### 8.5 本节完整 `GameManager`（相对 §6/§7 的合并）
+
+```ts
+import {
+    _decorator, Component, Node, Prefab, instantiate,
+    input, Input,
+} from 'cc';
+import { Pin } from './Pin';
+const { ccclass, property } = _decorator;
+
+@ccclass('GameManager')
+export class GameManager extends Component {
+    @property(Node) p1: Node | null = null;
+    @property(Node) p2: Node | null = null;
+    @property(Node) p3: Node | null = null;
+    @property(Prefab) pinPrefab: Prefab | null = null;
+
+    @property
+    moveDuration = 0.2;
+
+    private currentPin: Pin | null = null;
+
+    onLoad() {
+        input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+    }
+
+    onDestroy() {
+        input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
+    }
+
+    start() {
+        this.pinSpawn();
+    }
+
+    onTouchStart() {
+        if (!this.currentPin || !this.p3) return;
+        this.currentPin.moveTo(this.p3.position, this.moveDuration);
+        this.pinSpawn();
+    }
+
+    pinSpawn() {
+        if (!this.pinPrefab || !this.p1 || !this.p2) return;
+
+        const pinNode = instantiate(this.pinPrefab);
+        this.node.addChild(pinNode);
+        pinNode.setPosition(this.p1.position);
+
+        const pin = pinNode.getComponent(Pin);
+        if (!pin) {
+            console.error('实例化的针身上没有 Pin 组件，请检查 Prefab');
+            return;
+        }
+
+        this.currentPin = pin;
+        pin.moveTo(this.p2.position, this.moveDuration);
+    }
+}
+```
+
+### 8.6 验收与未做事项
+
+| 应看到 | 说明 |
+| --- | --- |
+| 开局 | 一根针从屏外滑到 p2 |
+| 点击 | 该针冲向 p3；下方同时再刷一根滑入 p2 |
+| 连点 | 可连续插入多根 |
+
+| 尚未做 | 下节方向 |
+| --- | --- |
+| 插上后不跟圆转 | §9：tween 结束后换父到 `Circle`，并保住世界位姿 |
+| 分数 UI | §10 |
+| 针头相碰失败 | 课序上在跟随旋转之后；本地暂无 P12 字幕 |
+
+---
+
+## 9. 针跟随圆球旋转（见缝插针 · P11）
+
+> [!summary]
+> 必须先等插针 tween **播完**，再挂到圆下。给 `moveTo` 增加可选 **`parentNode`**：动画结束用 `.call`；若传了父节点，则换父。直接 `addChild` / `setParent` 会把本地坐标（和旋转）重置，针会「飞到圆心」——课上先存 **世界位置 + 世界旋转**，换父后再设回去。
+
+### 9.1 两步，不能颠倒
+
+| 步骤 | 为何 |
+| --- | --- |
+| 1. 等到达到 p3 | 没到终点就跟圆转，轨迹会错 |
+| 2. 设为 Circle 子节点 | 父转子跟转（同 §3.3 / §5） |
+
+p1→p2 **不**换父；只有插入（p2→p3）才传 `circleNode`。
+
+### 9.2 tween 结束：`.call`
+
+在 `.to` 与 `.start` 之间加 `.call`，动画结束执行回调：
+
+```ts
+moveTo(targetPosition: Vec3, duration: number, parentNode: Node | null = null) {
+    tween(this.node)
+        .to(duration, { position: targetPosition }, { easing: 'smooth' })
+        .call(() => {
+            if (!parentNode) return;
+
+            // 换父会改本地变换，先保住世界位姿
+            const worldPos = this.node.worldPosition.clone();
+            const worldRot = this.node.worldRotation.clone();
+
+            this.node.setParent(parentNode);
+            this.node.setWorldPosition(worldPos);
+            this.node.setWorldRotation(worldRot);
+        })
+        .start();
+}
+```
+
+| 点 | 说明 |
+| --- | --- |
+| 第 3 参 `parentNode` | 默认 `null`；生成移向 p2 时不传 |
+| `.call(fn)` | tween 播完再跑；换父逻辑写在这里 |
+| `addChild` 踩坑 | 换父后本地坐标常变 **(0,0)**，针叠到圆心，预览像「消失」 |
+| 只 `setParent` | 位置仍会变；课上还发现 **旋转也被重置**，针朝向全竖着像辐条 |
+| 课上修法 | `getWorldPosition` / `getWorldRotation` → `setParent` → `setWorldPosition` / `setWorldRotation` |
+
+> [!tip] API 捷径
+> Creator 3.x 可用 `this.node.setParent(parentNode, true)`，第二参 **keepWorldTransform** 为 `true` 时保持世界变换。课上手写存取世界位姿，效果同类；记哪种都行。
+
+### 9.3 GameManager：插入时传入圆
+
+```ts
+@property(Node)
+circleNode: Node | null = null;
+
+// pinSpawn：只移到 p2，不传 parent
+pin.moveTo(this.p2.position, this.moveDuration);
+
+// onTouchStart：插入并指定父为圆
+this.currentPin.moveTo(this.p3.position, this.moveDuration, this.circleNode);
+this.pinSpawn();
+```
+
+检查器把场景里的 **Circle** 拖到 `circleNode`。
+
+### 9.4 验收
+
+1. 点击插入后，针停在圆缘，并随圆旋转。
+2. 层级里针应出现在 `Circle` 下，且不在圆心。
+3. 多根插入后，各针相对圆的「扎入角度」应保持（世界旋转保住）。
+
+> [!note] ASR 校正
+> *Toon* → **tween**；*.call* 监测结束；*唯控* → **null**；*game measure* → **GameManager**；*get the world position* → **worldPosition / getWorldPosition**。
+
+课末预告：两针接触 → 失败处理。本地暂无对应字幕（P12）；下一有字幕的一集是分数 UI。
+
+---
+
+## 10. 分数与 UI 更新（见缝插针 · P13）
+
+> [!summary]
+> Canvas 下建 **Label（ScoreLabel）** 置顶。`GameManager` 用私有 `score` + `@property(Label) scoreLabel`。更好的时机是 **插针到位** 再加分，而不是一点击就加——把 `updateScore` 抽出来，用 **单例** 让 `Pin` 在 tween `.call` 里调用。
+
+### 10.1 搭 ScoreLabel
+
+| 步骤 | 操作 |
+| --- | --- |
+| 1 | Canvas 右键 → UI 组件 → **Label**，命名 `ScoreLabel` |
+| 2 | 放到画面 **最上方**；初始文字 `0` |
+| 3 | 字号课上试过 80 → 100 → 200（三位数易溢出）→ 约 **180** 兼顾两三位 |
+| 4 | 颜色等按需；课上几乎没改 |
+
+### 10.2 分数数据 + 引用
+
+```ts
+@property(Label)
+scoreLabel: Label | null = null;
+
+private score = 0;
+```
+
+- `score`：**private**，不靠检查器拖。
+- `scoreLabel`：检查器把 `ScoreLabel` 拖进来。
+
+### 10.3 两种加分时机
+
+| 时机 | 做法 | 观感 |
+| --- | --- | --- |
+| A. 点击时 | `onTouchStart` 里 `score++` 并改 Label | 针还在飞，分已加，略早 |
+| B. 插上时（课上更推） | tween 结束（换父成功）再 `updateScore` | 针扎上才加分，更贴玩法 |
+
+抽方法：
+
+```ts
+updateScore() {
+    this.score++;
+    if (this.scoreLabel) {
+        this.scoreLabel.string = `${this.score}`;
+    }
+}
+```
+
+### 10.4 单例：让 Pin 回调到 GameManager
+
+Pin 到位时要调管理器，课上做成简单单例（场景里只挂一个）：
+
+```ts
+private static _inst: GameManager | null = null;
+
+public static get inst(): GameManager | null {
+    return GameManager._inst;
+}
+
+onLoad() {
+    GameManager._inst = this;
+    input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
+}
+```
+
+| 点 | 说明 |
+| --- | --- |
+| `static get inst` | 用属性访问：`GameManager.inst`，不必 `inst()` |
+| `onLoad` 赋值 | ASR *unload* → **`onLoad`** |
+| 用途 | `Pin` 不拖引用也能找到管理器 |
+
+在 `Pin.moveTo` 的 `.call` 里，换父之后：
+
+```ts
+.call(() => {
+    if (parentNode) {
+        const worldPos = this.node.worldPosition.clone();
+        const worldRot = this.node.worldRotation.clone();
+        this.node.setParent(parentNode);
+        this.node.setWorldPosition(worldPos);
+        this.node.setWorldRotation(worldRot);
+
+        GameManager.inst?.updateScore();
+    }
+})
+```
+
+这样只有 **传入了 parent（真正插入）** 才加分；p1→p2 滑入不加分。
+
+### 10.5 验收
+
+1. 开局 Label 为 `0`。
+2. 每次针插到圆上并跟转后，分数 +1 且 Label 同步。
+3. 仅滑入待命、未插入，分数不变。
+
+> [!note] ASR 校正
+> *RD 对象* → 创建 **Label**；*mr.score* → **`this.score`**；*string 赋值* → **`scoreLabel.string = ...`**；*加块* → 访问 getter **不加 `()`**。
+
+---
+
+## 11. 针头之间的碰撞检测（见缝插针 · P14）
+
+> [!summary]
+> 失败条件 = **针头碰针头**。Prefab 根 `Pin` 上挂 **`CircleCollider2D`**（半径对准针头），并在 **`Pin.ts`** 里对 `Collider2D` 注册 `Contact2DType.BEGIN_CONTACT`。Creator 3.x（Box2D）下还要同节点挂 **`RigidBody2D`**，并勾选 **Enabled Contact Listener**，否则常有碰撞体却无回调。场景里只需针带碰撞体时，发生接触即可判失败，不必再按 tag 分支。
+
+### 11.1 组件清单（Collider + 刚体）
+
+课上字幕主要演示了加 `CircleCollider2D`；实作时 **刚体不要漏**——否则编辑器里能看见绿圈，运行却收不到 `BEGIN_CONTACT`（或出现 `enabledContactListener` 相关空引用）。
+
+| 组件 | 挂在哪 | 作用 |
+| --- | --- | --- |
+| **CircleCollider2D** | Prefab 根 `Pin`（父节点） | 圆形碰撞形状；编辑半径/偏移，对准 **PinHead** |
+| **RigidBody2D** | **同一节点** `Pin` | 参与 2D 物理世界；碰撞体初始化时会查找同节点刚体 |
+
+#### RigidBody2D 必配项
+
+| 属性 | 建议 | 原因 |
+| --- | --- | --- |
+| **Type** | **Kinematic** | 针的位置由 **tween/脚本** 驱动，不是重力 Dynamic 模拟。双方若都是 **Static**，Box2D 下 **Static–Static 不碰撞** |
+| **Enabled Contact Listener** | **勾选** | Box2D 模块下：不开启则 **没有碰撞回调**（官方手册强调） |
+| Gravity Scale 等 | 保持默认即可 | Kinematic 不受重力；不必改成 Dynamic |
+
+> [!warning] 只加 Collider、不加刚体？
+> - **Builtin 2D**：一般有碰撞体即可出回调。
+> - **Box2D**（项目默认常见）：回调挂在「开启了接触监听的刚体」上；同节点缺 `RigidBody2D` / 未勾选监听 → 检测代码形同虚设。
+> - 碰撞体 `body` 字段：初始化时查找同节点刚体；找不到则为 `null`。
+
+可选：若只要「碰到就回调」、不要物理引擎把两针弹开，可把 Collider 的 **Sensor** 勾上（传感器：有回调、无冲量分离）。本玩法用 tween 插针，Sensor 往往更省心。
+
+项目侧确认：**项目设置 → 物理** 启用了 **2D 物理**（Box2D）。
+
+### 11.2 编辑 CircleCollider2D
+
+课上步骤：
+
+1. 打开 Pin Prefab（或启用二号位预览针方便看）。
+2. 根节点添加 **CircleCollider2D** → 点 **编辑**：缩小半径，把圆心 **拖到针头**，再微调到刚好盖住针头。
+3. **保存 / Apply** Prefab。预览用的 Position2 下的针可再 **禁用**。
+
+| 点 | 说明 |
+| --- | --- |
+| 挂在父节点 `Pin` | 脚本在 `Pin` 上 `getComponent(Collider2D)` 即可监听 |
+| 只给针加碰撞 | 场景里没有别的 Collider → **一碰就是针头对针头**，回调里可先不做类型判断 |
+| 不同时给大圆加 | 避免针插圆也被当成失败 |
+
+### 11.3 代码：注册 / 注销接触
+
+对照官方「碰撞回调」示例；`onLoad` 注册、`onDestroy` 注销。
+
+```ts
+import {
+    _decorator, Component, Collider2D, Contact2DType, IPhysics2DContact,
+} from 'cc';
+const { ccclass } = _decorator;
+
+@ccclass('Pin')
+export class Pin extends Component {
+    onLoad() {
+        const collider = this.getComponent(Collider2D);
+        if (collider) {
+            collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        } else {
+            console.error('针没有添加碰撞器，无法进行碰撞回调');
+        }
+    }
+
+    onDestroy() {
+        const collider = this.getComponent(Collider2D);
+        if (collider) {
+            collider.off(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
+        }
+        // 注销不必 else：没有碰撞体就无需 off
+    }
+
+    onBeginContact(
+        selfCollider: Collider2D,
+        otherCollider: Collider2D,
+        contact: IPhysics2DContact | null,
+    ) {
+        // P14：先打日志确认能收到；P15 再调 gameOver
+        console.log('contact', selfCollider, otherCollider);
+    }
+
+    // moveTo(...) 同 §9，略
+}
+```
+
+| 点 | 说明 |
+| --- | --- |
+| `getComponent(Collider2D)` | 基类即可，不必写死 `CircleCollider2D` |
+| 注册缺组件 → `console.error` | 课上「安全校验 + else」：否则会静默不跑，难查 |
+| 注销不加 else | 没有组件就不 off，不影响功能 |
+| 日志打出 **两次** | 每根针都挂了监听，A↔B 各触发一次 → **正常** |
+
+> [!note] ASR 校正
+> *unload* → **`onLoad`**；*contact / begincontact* → **`Contact2DType.BEGIN_CONTACT`**；*onDetroit* → **`onDestroy`**；*副物体* → **父节点**；*暂时进用* → **暂时禁用**。
+
+### 11.4 验收（本节）
+
+1. Prefab：`Pin` 上同时有 **RigidBody2D（Kinematic + 接触监听）** 与 **CircleCollider2D（盖住针头）**。
+2. 两根已插针的头重叠时，控制台出现接触日志（通常成对两次）。
+3. 若无日志：查刚体类型是否双方 Static、是否漏勾 Enabled Contact Listener、2D 物理是否开启。
+
+下节：在回调里调用 `GameManager.gameOver`（注意防重入）。
+
+---
+
+## 12. 游戏结束逻辑（见缝插针 · P15）
+
+> [!summary]
+> `GameManager.gameOver()`：用 **`isGameOver`** 保证只处理一次（两针各回调一次会进两次）。结束时 **`Circle.stopRotate()`**，并在 **`onTouchStart`** 里若已结束则不再发射。结束动画（界面放大、改背景色）留到下节。
+
+### 12.1 清理与入口
+
+- 可删掉早先为观察旋转加在圆边缘的 **标记子节点**（§3.3），正式玩法已有针可视化旋转。
+- 碰撞发生 → `Pin` 调 `GameManager.inst.gameOver()`。
+
+### 12.2 防重复：`isGameOver`
+
+一次接触 → 两根针各 `BEGIN_CONTACT` → **`gameOver` 会被叫两次**。用布尔闩锁：
+
+```ts
+private isGameOver = false;
+
+gameOver() {
+    if (this.isGameOver) return;
+    this.isGameOver = true;
+
+    // 停转、禁发射等只走一遍
+    const circle = this.circleNode?.getComponent(Circle);
+    circle?.stopRotate();
+}
+```
+
+| 次序 | `isGameOver` | 行为 |
+| --- | --- | --- |
+| 第一次进入 | `false` | 执行逻辑，再设为 `true` |
+| 第二次进入 | `true` | 立刻 `return` |
+
+### 12.3 停止圆旋转：`Circle`
+
+```ts
+// Circle.ts
+private isRotate = true; // 默认继续转
+
+update(deltaTime: number) {
+    if (!this.isRotate) return;
+    this.node.angle -= this.rotateSpeed * deltaTime;
+}
+
+stopRotate() {
+    this.isRotate = false;
+}
+```
+
+`gameOver` 里：`this.circleNode.getComponent(Circle)?.stopRotate()`。
+
+### 12.4 结束后禁止再插针
+
+```ts
+onTouchStart() {
+    if (this.isGameOver) return;
+    // ... moveTo(p3) + pinSpawn
+}
+```
+
+### 12.5 Pin 回调接上结束
+
+```ts
+onBeginContact(/* ... */) {
+    GameManager.inst?.gameOver();
+}
+```
+
+### 12.6 验收与未做
+
+| 应看到 | 说明 |
+| --- | --- |
+| 两针头相碰 | 圆立刻停转；再点屏幕不再出新针 |
+| 只结束一次 | 逻辑/副作用不因双回调执行两遍 |
+
+| 尚未做（下节） | 说明 |
+| --- | --- |
+| 结束动画 | 整个界面放大；背景颜色变化 |
+
+> [!note] ASR 校正
+> *easegame over* → **`isGameOver`**；*board / Bolling* → **`boolean`**；*retay / retend* → **`return`**；*默认为处*（旋转标志）→ 默认 **`true`（保持转）**；*circleNote* → **`circleNode`**。
 
 ---
