@@ -7,7 +7,7 @@ aliases:
   - 见缝插针
 created: 2026-11-17
 updated: 2026-11-17
-source: Cocos Creator 3.8 官方手册（项目结构）+ 《见缝插针》教程字幕（P04–P06，已校正 ASR）
+source: Cocos Creator 3.8 官方手册（项目结构）+ 《见缝插针》教程字幕（P04–P08，已校正 ASR）
 tags:
   - type/literature-note
   - topic/cocos
@@ -18,7 +18,7 @@ tags:
 # Cocos Creator 入门
 
 > [!summary]
-> 先认工程长什么样：你只在 `assets/` 里创作，其余多为编辑器/构建产物。资源靠同名 `.meta` 的 UUID 被引用，改名或移动请在编辑器里做。实战以 **见缝插针**（Creator 3.8 + TS）串起来：改 Camera 背景 → 摆圆 → `angle` 旋转 → **Pin Prefab** → 再代码实例化插针。本文以 **Cocos Creator 3.x（文档参考 3.8）** 为准。
+> 先认工程长什么样：你只在 `assets/` 里创作，其余多为编辑器/构建产物。资源靠同名 `.meta` 的 UUID 被引用，改名或移动请在编辑器里做。实战以 **见缝插针**（Creator 3.8 + TS）串起来：改 Camera 背景 → 摆圆 → `angle` 旋转 → Pin Prefab → 三定位点 → **GameManager.pinSpawn** → 再写针的移动与点击插入。本文以 **Cocos Creator 3.x（文档参考 3.8）** 为准。
 
 ## 本章目录
 
@@ -28,7 +28,9 @@ tags:
 | §2 背景色与圆圈 | 预览布局、Camera Clear Color / Clear Flags、Sprite 贴素材 | P04 |
 | §3 旋转圆圈 | 挂脚本、`@property` 速度、`update` 改 `node.angle`、子节点观察旋转 | P05 |
 | §4 针的 Prefab | 空节点 + 针身/针头子节点、缩放旋转配色、拖成预制体 | P06 |
-| （后续） | 实例化插针、碰撞/胜负、构建发布… | — |
+| §5 针的三个定位点 | 生命周期、Position1/2/3、到位判定 vs 碰撞、挂到 Circle 跟随旋转 | P07 |
+| §6 针的生成 | `GameManager`、`instantiate`、挂到管理器下、对齐 `p1` | P08 |
+| （后续） | 针自身移动到 p2、点击插向 p3、胜负判定… | — |
 
 ---
 
@@ -323,14 +325,14 @@ Circle          ← 挂 Circle.ts，每帧改 angle
 | --- | --- |
 | 1 | 创建 **空节点**，命名 `Pin`；可先放到画面偏下，方便和上方圆对比 |
 | 2 | 把 Texture 里的 **Pin** 图拖到 `Pin` 下，改名为 `PinBody`（针身） |
-| 3 | 再拖一份 **Circle** 到 `Pin` 下当针头，命名 `PinHat` |
+| 3 | 再拖一份 **Circle** 到 `Pin` 下当针头，命名 `PinHead`（P07 定名；若曾用 `PinHat` 请改名后 **Apply** Prefab） |
 
 目标层级：
 
 ```text
 Pin                 ← 空节点（之后做成 Prefab 的根）
 ├── PinBody         ← 针身 Sprite（素材 Pin）
-└── PinHat          ← 针头 Sprite（素材 Circle）
+└── PinHead         ← 针头 Sprite（素材 Circle）
 ```
 
 ### 4.3 针身：长短、朝向、颜色
@@ -363,6 +365,7 @@ Pin                 ← 空节点（之后做成 Prefab 的根）
 1. 在 `assets` 下建（或使用）`prefabs/` 文件夹。
 2. 把层级里的 `Pin` **拖进** `prefabs/`，生成 `Pin.prefab`。
 3. 场景里若留下蓝色/预制体实例，可按需要保留作预览，或删掉实例只留资源——正式玩法里针应由代码 **实例化**。
+4. Prefab 内改名（如 `PinHead`）后记得点 **Apply**，把修改写回资源。
 
 | 概念 | 说明 |
 | --- | --- |
@@ -370,6 +373,148 @@ Pin                 ← 空节点（之后做成 Prefab 的根）
 | 为何必须做 | 针会在场景里 **多次出现**，运行时不断 `instantiate`，不能每根手摆 |
 | 改 Prefab | 改资源后，已有实例可同步；以后插针逻辑挂在根或单独脚本上即可 |
 
-下节方向：用代码 **实例化 Pin**，再往上插到转着的圆上。
+---
+
+## 5. 针的三个定位点（见缝插针 · P07）
+
+> [!summary]
+> 针不直接蹦在屏内：先在屏外生成 → 移到待命点 → 点击再插到圆上。用三个空节点 `Position1/2/3` 只存坐标；「是否插上」课上用 **是否到达三号位** 判定，不必先上碰撞体。插上后把针设为 `Circle` 子节点即可跟着转。
+
+### 5.1 一根针的生命周期
+
+```text
+屏外生成 (①)
+    → 移入屏内待命 (②)
+    → 玩家点击
+    → 向上插到圆上 (③)
+    → 与已插针的针头做碰撞/重叠判定 → 成功或失败
+```
+
+| 阶段 | 为何这样 |
+| --- | --- |
+| 先屏外再移入 | 直接在屏内刷出针会显得突兀，滑入更自然 |
+| 点击才插入 | ② 是「就位、等操作」；点左键后才从 ② 冲向 ③ |
+| 插上后跟圆转 | 把针设为 `Circle` 的 **子节点**，父转子跟转（同 §3.3） |
+| 胜负 | 插入时跟 **其他已插针的针头** 是否碰撞/重叠（后续课实现） |
+
+### 5.2 两种「插到圆上」的判定
+
+| 方式 | 做法 | 课上选择 |
+| --- | --- | --- |
+| 碰撞 | 针与大圆都加 **BoxCollider**，碰撞回调里认为插上 | 可做，本课不用 |
+| **到位** | 针运动到固定的 **三号位** 即视为已插上 | **采用**：路径是直线，终点已知，够用 |
+
+> [!note]
+> 三号位要摆在「针尖刚好没入圆」的视觉位置。后续代码只需判断是否到达该坐标（或 tween 完成），再 `setParent(Circle)`。
+
+### 5.3 三个 Position 空节点
+
+| 节点 | 含义 | 摆放提示 |
+| --- | --- | --- |
+| **Position1** | 生成点（一号位） | 屏外偏下；针从这里刷出 |
+| **Position2** | 就位/待命（二号位） | 屏内下方；与 ① 留一点距离，移入才有「滑进来」的时间 |
+| **Position3** | 插上圆的终点（三号位） | 再往上，对齐大圆边缘该插住的位置 |
+
+它们 **只负责定位**，不挂玩法逻辑。
+
+搭建步骤（课上）：
+
+1. 建空节点 `Position1`；把预览用的 `Pin` 放它下面，**本地坐标归零**，再整体挪 `Position1` 到屏外——方便看见「生成点上的针长什么样」。
+2. **Ctrl+D** 复制 → 改名为 `Position2`，上移到屏内待命处；若与 ① 太近就再把 ② 略下移。
+3. 再 **Ctrl+D** → `Position3`，继续上移到插圆位置。
+4. 正式跑流程时：实例化针到 ① 的世界坐标 → 运动到 ② → 点击后运动到 ③。
+
+```text
+（屏外）Position1 ──移动──► Position2 ──点击──► Position3（贴圆）
+                              待命                    插上 → parent = Circle
+```
+
+预览时可在每个 Position 下临时挂一根 Pin（本地 0,0）；调间距时看整根针是否出屏、①→② 是否够「滑入感」、②→③ 是否太短。
+
+> [!tip]
+> 三个点尽量 **同一竖直线**（同 X、不同 Y），后面移动只需改 Y，逻辑简单。
+
+定位调完后：Position 下临时预览用的 Pin 可 **销毁** 或 **先禁用**；以后要微调位置再启用即可。正式针一律由代码生成。
+
+---
+
+## 6. 针的生成（见缝插针 · P08）
+
+> [!summary]
+> 用空节点挂 **`GameManager`**：引用 `p1/p2/p3` + `pinPrefab`。`pinSpawn` 里 `instantiate` → `addChild` 到管理器下 → 位置对齐一号位。开局在 `start` 生成一根；**移动交给针自己**（下节）。
+
+### 6.1 场景准备
+
+| 步骤 | 操作 |
+| --- | --- |
+| 1 | `scripts` 下新建脚本 `GameManager.ts` |
+| 2 | 场景建空节点，也叫 `GameManager`，挂上该脚本 |
+| 3 | 职责预留：生成针、以后还有失败/胜利判定 |
+| 4 | 检查器赋值：`p1`/`p2`/`p3` ← 三个 Position；`pinPrefab` ← Prefab 资源 |
+
+### 6.2 脚本：`GameManager.ts`
+
+```ts
+import { _decorator, Component, Node, Prefab, instantiate } from 'cc';
+const { ccclass, property } = _decorator;
+
+@ccclass('GameManager')
+export class GameManager extends Component {
+    @property(Node)
+    p1: Node | null = null;
+
+    @property(Node)
+    p2: Node | null = null;
+
+    @property(Node)
+    p3: Node | null = null;
+
+    @property(Prefab)
+    pinPrefab: Prefab | null = null;
+
+    start() {
+        this.pinSpawn();
+    }
+
+    /** 在一号位生成一根针 */
+    pinSpawn() {
+        if (!this.pinPrefab || !this.p1) return;
+
+        const pin = instantiate(this.pinPrefab);
+        this.node.addChild(pin);
+
+        // 课上：用本地坐标；要求 GameManager 与 Position 同父，且管理器本地坐标约为 (0,0)
+        pin.setPosition(this.p1.position);
+
+        // 更稳妥（父节点坐标不一致时）：
+        // pin.setWorldPosition(this.p1.worldPosition);
+    }
+}
+```
+
+| API / 字段 | 作用 |
+| --- | --- |
+| `@property(Node) p1/p2/p3` | 三个定位点；本节生成只用 `p1`，`p2`/`p3` 留给移动与插入 |
+| `@property(Prefab) pinPrefab` | 要实例化的针预制体 |
+| `instantiate(prefab)` | 克隆出节点树实例 |
+| `this.node.addChild(pin)` | 先挂在 `GameManager` 下，方便在层级里找到 |
+| `pin.setPosition(this.p1.position)` | 初始落在一号位（课上写法） |
+| `start()` | 游戏开始先刷一根针 |
+
+### 6.3 运行时怎么确认生成成功
+
+1. 检查器里四个引用都已拖好（未赋值会什么都没有）。
+2. 运行后预览里可能 **看不见**（针还在屏外一号位）。
+3. 打开 **层级管理器**：`GameManager` 下应出现新的 `Pin`；或点 **暂停**，在场景/预览底区能看到屏外那根针。
+
+> [!warning] 本地坐标前提
+> `setPosition(p1.position)` 只有在「Pin 的父节点」与「p1 的父节点」坐标系对齐时才等价（课上：`GameManager` 本地约在原点，和 Position 同挂在 Canvas 下）。若管理器不在原点，改用 `setWorldPosition(this.p1.worldPosition)`。
+
+### 6.4 和下一节的分工
+
+| 谁 | 管什么 |
+| --- | --- |
+| `GameManager` | `pinSpawn` 生成；以后胜负 |
+| **针自身脚本**（下节） | 生成后自己运动到 **p2**，再响应点击冲向 **p3** |
 
 ---
